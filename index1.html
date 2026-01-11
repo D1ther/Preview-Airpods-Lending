@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore | Електроніка та гаджети</title>
+    <meta name="description" content="Інтернет-магазин електроніки:  смартфони, ноутбуки, аксесуари. Офіційна гарантія, швидка доставка по Україні. ">
+    
+    <!-- Google Ads Conversion Tracking -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXX"></script> -->
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary:  #00d4ff;
+            --primary-dark: #00a8cc;
+            --accent: #ff6b35;
+            --accent-hover: #ff8555;
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --bg-secondary: #16161f;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --text-muted: #6b6b7b;
+            --border:  #2a2a3a;
+            --success: #00c853;
+            --gradient-primary: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            --gradient-accent: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            --glow-primary: 0 0 20px rgba(0, 212, 255, 0.3);
+            --glow-accent: 0 0 20px rgba(255, 107, 53, 0.3);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            background: var(--bg-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background:  var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom:  1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo i {
+            color: var(--primary);
+        }
+
+        .nav-logo span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-icon {
+            width: 22px;
+            height: 22px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .nav-icon:hover {
+            color: var(--primary);
+            transform:  scale(1.1);
+        }
+
+        .cart-wrapper {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-phone {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .nav-phone i {
+            color: var(--success);
+            width: 18px;
+            height: 18px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+
+        .mobile-menu-btn i {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 24px 100px;
+            background: var(--bg-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 50%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items:  center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background:  rgba(0, 212, 255, 0.1);
+            border:  1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight:  500;
+            color: var(--primary);
+            margin-bottom: 24px;
+        }
+
+        .hero-badge i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero-title {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight:  800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight:  600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: white;
+            box-shadow: var(--glow-accent);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            margin-top:  48px;
+            padding-top: 48px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight:  800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .hero-image-wrapper::before {
+            content:  '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-image-wrapper i {
+            width: 200px;
+            height: 200px;
+            color: var(--primary);
+            opacity: 0.3;
+        }
+
+        .floating-card {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .floating-card-1 {
+            top: 10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .floating-card-2 {
+            bottom: 20%;
+            right: -10%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform:  translateY(-10px); }
+        }
+
+        .floating-card i {
+            width: 24px;
+            height: 24px;
+            color: var(--primary);
+        }
+
+        .floating-card span {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Categories Strip */
+        .categories-strip {
+            padding: 24px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .categories-container {
+            max-width: 1400px;
+            margin:  0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .category-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius:  100px;
+            font-size:  14px;
+            font-weight:  500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-chip:hover,
+        .category-chip.active {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .category-chip i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Section Styles */
+        .section-container {
+            max-width:  1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .section-title-group {
+            max-width: 500px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom:  12px;
+        }
+
+        .section-label i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight:  700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .btn-outline {
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 10px;
+            font-size:  14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline i {
+            width:  18px;
+            height: 18px;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 80px 24px;
+            background: var(--bg-dark);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .product-badges {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .product-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size:  11px;
+            font-weight:  700;
+            text-transform: uppercase;
+        }
+
+        .badge-new {
+            background: var(--gradient-primary);
+            color: var(--bg-dark);
+        }
+
+        .badge-sale {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .badge-hit {
+            background: rgba(0, 200, 83, 0.2);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 240px;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image i {
+            width: 80px;
+            height: 80px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .product-card:hover .product-image i {
+            opacity: 0.8;
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .product-actions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            transform: translateX(10px);
+            transition: all 0.3s;
+        }
+
+        .product-card:hover .product-actions {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .product-action-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .product-action-btn:hover {
+            background:  var(--primary);
+            border-color: var(--primary);
+        }
+
+        .product-action-btn:hover i {
+            color: var(--bg-dark);
+        }
+
+        .product-action-btn i {
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .product-info {
+            padding: 24px;
+        }
+
+        .product-category {
+            font-size: 12px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight:  600;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp:2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-name a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .product-name a:hover {
+            color: var(--primary);
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom:  16px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .stars i {
+            width: 14px;
+            height: 14px;
+            color: #fbbf24;
+            fill: #fbbf24;
+        }
+
+        .rating-count {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top:  1px solid var(--border);
+        }
+
+        .product-price {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .price-current {
+            font-size: 20px;
+            font-weight:  700;
+            color: var(--text-primary);
+        }
+
+        .price-old {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .btn-cart {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-accent);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cart:hover {
+            transform: scale(1.1);
+            box-shadow: var(--glow-accent);
+        }
+
+        .btn-cart i {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 24px;
+            background: var(--bg-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            text-align:  center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .feature-icon i {
+            width: 32px;
+            height: 32px;
+            color: var(--primary);
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight:  600;
+            margin-bottom: 12px;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height:  1.6;
+        }
+
+        /* Promo Banner */
+        .promo {
+            padding: 80px 24px;
+            background: var(--bg-dark);
+        }
+
+        .promo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border:  1px solid var(--border);
+            border-radius: 24px;
+            padding: 64px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+        }
+
+        .promo-content {
+            position:  relative;
+            z-index: 1;
+        }
+
+        .promo-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 107, 53, 0.1);
+            border:  1px solid rgba(255, 107, 53, 0.3);
+            border-radius: 100px;
+            font-size:  13px;
+            font-weight:  600;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .promo-label i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .promo-title {
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .promo-title span {
+            color: var(--accent);
+        }
+
+        .promo-text {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height:  1.7;
+        }
+
+        .promo-timer {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .timer-item {
+            text-align: center;
+        }
+
+        .timer-value {
+            width: 64px;
+            height: 64px;
+            background: var(--bg-secondary);
+            border:  1px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight:  800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .timer-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .promo-visual {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .promo-image {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .promo-image i {
+            width: 150px;
+            height: 150px;
+            color: var(--accent);
+            opacity: 0.5;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 80px 24px;
+            background: var(--bg-secondary);
+        }
+
+        .contact-container {
+            max-width: 1400px;
+            margin:  0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+        }
+
+        .contact-info h2 {
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .contact-info > p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-item {
+            display:  flex;
+            align-items:  center;
+            gap: 16px;
+        }
+
+        .contact-item-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-item-icon i {
+            width: 22px;
+            height: 22px;
+            color: var(--primary);
+        }
+
+        .contact-item-text {
+            font-size: 15px;
+        }
+
+        .contact-item-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .contact-form-wrapper {
+            background: var(--bg-card);
+            border:  1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+        }
+
+        .contact-form-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-primary);
+            transition:  all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-accent);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-accent);
+        }
+
+        .btn-submit i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-dark);
+            padding: 64px 24px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin:  0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-bottom: 16px;
+        }
+
+        .footer-logo i {
+            color: var(--primary);
+        }
+
+        .footer-logo span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background:  var(--primary);
+            border-color: var(--primary);
+        }
+
+        .social-link:hover i {
+            color: var(--bg-dark);
+        }
+
+        .social-link i {
+            width:  18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        .footer-column h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .footer-column ul {
+            list-style:  none;
+        }
+
+        .footer-column li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column a {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration:  none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-copyright {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-payments {
+            display: flex;
+            gap: 12px;
+        }
+
+        .payment-icon {
+            width:  40px;
+            height:  28px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius:  6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .payment-icon i {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .promo-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .promo-timer {
+                justify-content: center;
+            }
+
+            .promo-visual {
+                display:  none;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width:  768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-phone {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 120px 20px 60px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 24px;
+                align-items: center;
+            }
+
+            .stat-item {
+                text-align: center;
+            }
+
+            .section-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .categories-container {
+                justify-content: flex-start;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 8px;
+            }
+
+            .category-chip {
+                flex-shrink: 0;
+            }
+
+            .promo-container {
+                padding: 32px;
+            }
+
+            .promo-timer {
+                flex-wrap: wrap;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                <i data-lucide="cpu"></i>
+                <span>TechStore</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#products">Каталог</a></li>
+                <li><a href="#features">Переваги</a></li>
+                <li><a href="#promo">Акції</a></li>
+                <li><a href="#contact">Контакти</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <div class="nav-phone">
+                    <i data-lucide="phone"></i>
+                    <span>+380 (99) 123-45-67</span>
+                </div>
+                <i data-lucide="search" class="nav-icon"></i>
+                <i data-lucide="heart" class="nav-icon"></i>
+                <div class="cart-wrapper">
+                    <i data-lucide="shopping-cart" class="nav-icon"></i>
+                    <span class="cart-badge">0</span>
+                </div>
+                <button class="mobile-menu-btn">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i data-lucide="zap"></i>
+                    Офіційний дилер
+                </div>
+                <h1 class="hero-title">
+                    Електроніка та гаджети <span>нового покоління</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Інтернет-магазин сучасної електроніки з офіційною гарантією.  Швидка доставка по всій Україні.  Найкращі ціни та професійна консультація.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#products" class="btn btn-primary">
+                        <i data-lucide="shopping-bag"></i>
+                        Перейти до каталогу
+                    </a>
+                    <a href="#contact" class="btn btn-secondary">
+                        <i data-lucide="phone"></i>
+                        Зателефонувати
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">30+</div>
+                        <div class="stat-label">Товарів у каталозі</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2500+</div>
+                        <div class="stat-label">Задоволених клієнтів</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">Онлайн підтримка</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-image-wrapper">
+                    <i data-lucide="smartphone"></i>
+                </div>
+                <div class="floating-card floating-card-1">
+                    <i data-lucide="truck"></i>
+                    <span>Безкоштовна доставка</span>
+                </div>
+                <div class="floating-card floating-card-2">
+                    <i data-lucide="shield-check"></i>
+                    <span>Гарантія 24 міс</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Strip -->
+    <div class="categories-strip">
+        <div class="categories-container">
+            <div class="category-chip active">
+                <i data-lucide="grid-3x3"></i>
+                Всі товари
+            </div>
+            <div class="category-chip">
+                <i data-lucide="smartphone"></i>
+                Смартфони
+            </div>
+            <div class="category-chip">
+                <i data-lucide="laptop"></i>
+                Ноутбуки
+            </div>
+            <div class="category-chip">
+                <i data-lucide="headphones"></i>
+                Аудіо
+            </div>
+            <div class="category-chip">
+                <i data-lucide="watch"></i>
+                Годинники
+            </div>
+            <div class="category-chip">
+                <i data-lucide="gamepad-2"></i>
+                Геймінг
+            </div>
+            <div class="category-chip">
+                <i data-lucide="cable"></i>
+                Аксесуари
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-title-group">
+                    <div class="section-label">
+                        <i data-lucide="flame"></i>
+                        Популярні товари
+                    </div>
+                    <h2 class="section-title">Хіти продажів</h2>
+                    <p class="section-subtitle">Найпопулярніші товари, які обирають наші клієнти</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn-outline">
+                        <i data-lucide="sliders-horizontal"></i>
+                        Фільтри
+                    </button>
+                    <button class="btn-outline">
+                        Всі товари
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="products-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-badges">
+                        <span class="product-badge badge-hit">Хіт</span>
+                    </div>
+                    <div class="product-image">
+                        <i data-lucide="smartphone"></i>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i data-lucide="heart"></i></button>
+                            <button class="product-action-btn"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Смартфони</div>
+                        <h3 class="product-name"><a href="#">iPhone 15 Pro Max 256GB Titanium</a></h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+                            </div>
+                            <span class="rating-count">(128)</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price"><span class="price-current">54 999 грн</span></div>
+                            <button class="btn-cart"><i data-lucide="shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-badges">
+                        <span class="product-badge badge-new">New</span>
+                    </div>
+                    <div class="product-image">
+                        <i data-lucide="laptop"></i>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i data-lucide="heart"></i></button>
+                            <button class="product-action-btn"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Ноутбуки</div>
+                        <h3 class="product-name"><a href="#">MacBook Pro 14" M3 Pro 512GB</a></h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+                            </div>
+                            <span class="rating-count">(89)</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price"><span class="price-current">84 999 грн</span></div>
+                            <button class="btn-cart"><i data-lucide="shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-badges">
+                        <span class="product-badge badge-sale">-20%</span>
+                    </div>
+                    <div class="product-image">
+                        <i data-lucide="headphones"></i>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i data-lucide="heart"></i></button>
+                            <button class="product-action-btn"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Аудіо</div>
+                        <h3 class="product-name"><a href="#">AirPods Pro 2nd Gen USB-C</a></h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+                            </div>
+                            <span class="rating-count">(256)</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">
+                                <span class="price-current">9 599 грн</span>
+                                <span class="price-old">11 999 грн</span>
+                            </div>
+                            <button class="btn-cart"><i data-lucide="shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i data-lucide="watch"></i>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i data-lucide="heart"></i></button>
+                            <button class="product-action-btn"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Годинники</div>
+                        <h3 class="product-name"><a href="#">Apple Watch Ultra 2 49mm</a></h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+                            </div>
+                            <span class="rating-count">(67)</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price"><span class="price-current">36 999 грн</span></div>
+                            <button class="btn-cart"><i data-lucide="shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card">
+                    <div class="product-badges">
+                        <span class="product-badge badge-hit">Хіт</span>
+                    </div>
+                    <div class="product-image">
+                        <i data-lucide="tablet"></i>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i data-lucide="heart"></i></button>
+                            <button class="product-action-btn"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Планшети</div>
+                        <h3 class="product-name"><a href="#">iPad Pro 12.9" M2 256GB WiFi</a></h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+                            </div>
+                            <span class="rating-count">(94)</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price"><span class="price-current">52 999 грн</span></div>
+                            <button class="btn-cart"><i data-lucide="shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card">
+                    <div class="product-badges">
+                        <span class="product-badge badge-sale">-15%</span>
+                    </div>
+                    <div class="product-image">
+                        <i data-lucide="speaker"></i>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i data-lucide="heart"></i></button>
+                            <button class="product-action-btn"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Аудіо</div>
+                        <h3 class="product-name"><a href="#">HomePod mini Space Gray</a></h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+                            </div>
+                            <span class="rating-count">(183)</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">
+                                <span class="price-current">4 249 грн</span>
+                                <span class="price-old">4 999 грн</span>
+                            </div>
+                            <button class="btn-cart"><i data-lucide="shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i data-lucide="gamepad-2"></i>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i data-lucide="heart"></i></button>
+                            <button class="product-action-btn"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Геймінг</div>
+                        <h3 class="product-name"><a href="#">PlayStation 5 Slim Digital Edition</a></h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+                            </div>
+                            <span class="rating-count">(312)</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price"><span class="price-current">18 999 грн</span></div>
+                            <button class="btn-cart"><i data-lucide="shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product-card">
+                    <div class="product-badges">
+                        <span class="product-badge badge-new">New</span>
+                    </div>
+                    <div class="product-image">
+                        <i data-lucide="battery-charging"></i>
+                        <div class="product-actions">
+                            <button class="product-action-btn"><i data-lucide="heart"></i></button>
+                            <button class="product-action-btn"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">Аксесуари</div>
+                        <h3 class="product-name"><a href="#">MagSafe Battery Pack 5000mAh</a></h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+                            </div>
+                            <span class="rating-count">(78)</span>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price"><span class="price-current">4 499 грн</span></div>
+                            <button class="btn-cart"><i data-lucide="shopping-cart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-container">
+            <div class="section-header" style="justify-content: center; text-align: center;">
+                <div class="section-title-group" style="max-width: 600px;">
+                    <div class="section-label">
+                        <i data-lucide="award"></i>
+                        Наші переваги
+                    </div>
+                    <h2 class="section-title">Чому обирають нас</h2>
+                    <p class="section-subtitle">Ми гарантуємо найкращий сервіс для наших клієнтів</p>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="truck"></i></div>
+                    <h3 class="feature-title">Швидка доставка</h3>
+                    <p class="feature-text">Безкоштовна доставка по Україні від 2000 грн.  Відправка в день замовлення.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                    <h3 class="feature-title">Офіційна гарантія</h3>
+                    <p class="feature-text">Гарантія до 24 місяців на всю техніку. Сервісні центри по всій Україні.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="credit-card"></i></div>
+                    <h3 class="feature-title">Зручна оплата</h3>
+                    <p class="feature-text">Оплата карткою, Apple Pay, Google Pay, ПриватБанк, Монобанк або при отриманні. </p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon"><i data-lucide="refresh-cw"></i></div>
+                    <h3 class="feature-title">Обмін та повернення</h3>
+                    <p class="feature-text">14 днів на повернення товару. Обмін без зайвих питань.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promo Section -->
+    <section class="promo" id="promo">
+        <div class="promo-container">
+            <div class="promo-content">
+                <div class="promo-label">
+                    <i data-lucide="percent"></i>
+                    Акція тижня
+                </div>
+                <h2 class="promo-title">Знижки до <span>40%</span> на аксесуари</h2>
+                <p class="promo-text">Встигніть придбати оригінальні аксесуари за найкращими цінами. Акція діє до кінця тижня! </p>
+                <div class="promo-timer">
+                    <div class="timer-item">
+                        <div class="timer-value" id="days">02</div>
+                        <div class="timer-label">Днів</div>
+                    </div>
+                    <div class="timer-item">
+                        <div class="timer-value" id="hours">14</div>
+                        <div class="timer-label">Годин</div>
+                    </div>
+                    <div class="timer-item">
+                        <div class="timer-value" id="minutes">35</div>
+                        <div class="timer-label">Хвилин</div>
+                    </div>
+                    <div class="timer-item">
+                        <div class="timer-value" id="seconds">48</div>
+                        <div class="timer-label">Секунд</div>
+                    </div>
+                </div>
+                <a href="#products" class="btn btn-primary">
+                    <i data-lucide="shopping-bag"></i>
+                    Переглянути акції
+                </a>
+            </div>
+            <div class="promo-visual">
+                <div class="promo-image">
+                    <i data-lucide="gift"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact
