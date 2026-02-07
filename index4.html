@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoHub — Фріланс-біржа з оплатою в крипті</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        /* ======================================================
+           0. RESET & CUSTOM PROPERTIES
+           ====================================================== */
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        :root {
+            /* palette */
+            --bg-0: #06060b;
+            --bg-1: #0c0c14;
+            --bg-2: #111119;
+            --bg-3: #17171f;
+            --bg-4: #1d1d28;
+            --border-subtle: rgba(255,255,255,.06);
+            --border: rgba(255,255,255,.09);
+            --border-strong: rgba(255,255,255,.14);
+
+            --text-1: #f4f4f8;
+            --text-2: #a3a3b8;
+            --text-3: #64647a;
+
+            --accent: #6d5cff;
+            --accent-l: #8b7dff;
+            --accent-glow: rgba(109,92,255,.2);
+            --accent-glow-strong: rgba(109,92,255,.35);
+            --cyan: #22d3ee;
+            --cyan-bg: rgba(34,211,238,.08);
+            --green: #34d399;
+            --green-bg: rgba(52,211,153,.08);
+            --amber: #fbbf24;
+            --amber-bg: rgba(251,191,36,.08);
+            --rose: #fb7185;
+            --rose-bg: rgba(251,113,133,.08);
+            --sky: #38bdf8;
+            --sky-bg: rgba(56,189,248,.08);
+
+            /* layout */
+            --sidebar-w: 260px;
+            --header-h: 64px;
+            --radius: 14px;
+            --radius-s: 10px;
+            --radius-xs: 6px;
+            --transition: .18s ease;
+        }
+
+        html { scroll-behavior:smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            background: var(--bg-0);
+            color: var(--text-1);
+            line-height: 1.55;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        a { color:inherit; text-decoration:none; }
+        button { cursor:pointer; border:none; font-family:inherit; background:none; color:inherit; }
+        input, textarea, select { font-family:inherit; }
+        img { max-width:100%; display:block; }
+
+        ::-webkit-scrollbar { width:5px; }
+        ::-webkit-scrollbar-track { background:var(--bg-0); }
+        ::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:3px; }
+
+        .mono { font-family:'JetBrains Mono', monospace; }
+
+        /* ======================================================
+           1. LAYOUT  — sidebar + main
+           ====================================================== */
+        .app { display:flex; min-height:100vh; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--bg-1);
+            border-right: 1px solid var(--border-subtle);
+            display: flex; flex-direction: column;
+            position: fixed; top:0; left:0; bottom:0;
+            z-index: 80;
+            transition: transform .25s ease;
+        }
+
+        .sidebar-header {
+            height: var(--header-h);
+            display: flex; align-items:center; gap:10px;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .sidebar-logo {
+            width:34px; height:34px;
+            background: linear-gradient(135deg, var(--accent), var(--cyan));
+            border-radius: var(--radius-xs);
+            display:flex; align-items:center; justify-content:center;
+        }
+        .sidebar-logo i { width:18px; height:18px; color:#fff; }
+
+        .sidebar-brand { font-size:17px; font-weight:800; letter-spacing:-.3px; }
+        .sidebar-brand span { color:var(--accent-l); }
+
+        .sidebar-nav { flex:1; padding:16px 12px; display:flex; flex-direction:column; gap:2px; }
+
+        .nav-item {
+            display:flex; align-items:center; gap:10px;
+            padding: 10px 12px;
+            border-radius: var(--radius-xs);
+            font-size:14px; font-weight:500;
+            color: var(--text-3);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-item i { width:18px; height:18px; }
+        .nav-item:hover { color:var(--text-2); background: var(--bg-3); }
+        .nav-item.active { color:var(--text-1); background: var(--bg-4); }
+        .nav-item.active::before {
+            content:'';
+            position:absolute; left:0;
+            width:3px; height:24px;
+            background:var(--accent);
+            border-radius:0 3px 3px 0;
+        }
+
+        .nav-divider {
+            height:1px;
+            background:var(--border-subtle);
+            margin: 12px 0;
+        }
+
+        .nav-label {
+            font-size:11px; font-weight:700;
+            color:var(--text-3);
+            text-transform:uppercase;
+            letter-spacing:.8px;
+            padding: 8px 12px 4px;
+        }
+
+        .sidebar-footer {
+            padding:16px;
+            border-top:1px solid var(--border-subtle);
+        }
+
+        .sidebar-user {
+            display:flex; align-items:center; gap:10px;
+            padding:8px 10px;
+            border-radius:var(--radius-xs);
+            transition:var(--transition);
+        }
+        .sidebar-user:hover { background:var(--bg-3); }
+
+        .user-avatar {
+            width:34px; height:34px;
+            border-radius:50%;
+            background: linear-gradient(135deg, var(--cyan), var(--accent));
+            display:flex; align-items:center; justify-content:center;
+            font-size:14px; font-weight:700;
+        }
+
+        .user-info { flex:1; }
+        .user-name { font-size:13px; font-weight:600; }
+        .user-tag { font-size:11px; color:var(--text-3); }
+
+        /* --- MAIN --- */
+        .main {
+            flex:1;
+            margin-left: var(--sidebar-w);
+            min-height:100vh;
+        }
+
+        /* Top bar */
+        .topbar {
+            height: var(--header-h);
+            display:flex; align-items:center; justify-content:space-between;
+            padding: 0 32px;
+            border-bottom:1px solid var(--border-subtle);
+            background: rgba(6,6,11,.6);
+            backdrop-filter: blur(16px);
+            position:sticky; top:0; z-index:50;
+        }
+
+        .topbar-left { display:flex; align-items:center; gap:16px; }
+        .topbar-title { font-size:16px; font-weight:700; }
+
+        .breadcrumb { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); }
+        .breadcrumb i { width:14px; height:14px; }
+        .breadcrumb .current { color:var(--text-1); font-weight:600; }
+
+        .topbar-right { display:flex; align-items:center; gap:8px; }
+
+        .topbar-btn {
+            width:38px; height:38px;
+            border-radius:var(--radius-xs);
+            display:flex; align-items:center; justify-content:center;
+            color:var(--text-3);
+            transition:var(--transition);
+            position:relative;
+        }
+        .topbar-btn:hover { background:var(--bg-3); color:var(--text-1); }
+        .topbar-btn i { width:18px; height:18px; }
+
+        .topbar-btn .notif-dot {
+            position:absolute; top:8px; right:8px;
+            width:7px; height:7px;
+            background:var(--rose);
+            border-radius:50%;
+            border:2px solid var(--bg-0);
+        }
+
+        .mobile-toggle { display:none; }
+
+        /* Content */
+        .content { padding:28px 32px; }
+
+        /* ======================================================
+           2. PAGES
+           ====================================================== */
+        .page { display:none; }
+        .page.active { display:block; }
+
+        /* ======================================================
+           3. HOME / DASHBOARD
+           ====================================================== */
+        /* Hero banner */
+        .dash-hero {
+            background: var(--bg-2);
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            padding:40px;
+            position:relative;
+            overflow:hidden;
+            margin-bottom:28px;
+        }
+
+        .dash-hero::before {
+            content:'';
+            position:absolute; top:-60%; right:-10%;
+            width:500px; height:500px;
+            background:radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events:none;
+        }
+
+        .dash-hero::after {
+            content:'';
+            position:absolute; bottom:-40%; left:10%;
+            width:300px; height:300px;
+            background:radial-gradient(circle, var(--cyan-bg) 0%, transparent 70%);
+            pointer-events:none;
+        }
+
+        .dash-hero h1 {
+            font-size:clamp(24px,3.5vw,36px);
+            font-weight:800;
+            letter-spacing:-.5px;
+            margin-bottom:8px;
+            position:relative;
+        }
+        .dash-hero h1 .grad {
+            background:linear-gradient(135deg, var(--accent-l), var(--cyan));
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+        }
+        .dash-hero p {
+            color:var(--text-2);
+            font-size:15px;
+            max-width:480px;
+            margin-bottom:24px;
+            position:relative;
+        }
+
+        .hero-btns { display:flex; gap:10px; position:relative; flex-wrap:wrap; }
+
+        .btn-glow {
+            padding:12px 28px;
+            background:var(--accent);
+            color:#fff;
+            border-radius:var(--radius-xs);
+            font-size:14px; font-weight:600;
+            display:inline-flex; align-items:center; gap:8px;
+            transition:var(--transition);
+            box-shadow:0 4px 24px var(--accent-glow);
+        }
+        .btn-glow:hover { background:var(--accent-l); transform:translateY(-1px); box-shadow:0 6px 32px var(--accent-glow-strong); }
+        .btn-glow i { width:16px; height:16px; }
+
+        .btn-ghost {
+            padding:12px 28px;
+            background:var(--bg-3);
+            border:1px solid var(--border);
+            color:var(--text-1);
+            border-radius:var(--radius-xs);
+            font-size:14px; font-weight:600;
+            display:inline-flex; align-items:center; gap:8px;
+            transition:var(--transition);
+        }
+        .btn-ghost:hover { background:var(--bg-4); border-color:var(--border-strong); }
+        .btn-ghost i { width:16px; height:16px; }
+
+        /* Stat Cards */
+        .stat-row {
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+            gap:14px;
+            margin-bottom:32px;
+        }
+
+        .stat-card {
+            background:var(--bg-2);
+            border:1px solid var(--border);
+            border-radius:var(--radius-s);
+            padding:20px;
+            display:flex; align-items:flex-start; gap:14px;
+        }
+
+        .stat-icon {
+            width:42px; height:42px;
+            border-radius:var(--radius-xs);
+            display:flex; align-items:center; justify-content:center;
+            flex-shrink:0;
+        }
+        .stat-icon i { width:20px; height:20px; }
+        .stat-icon.purple { background:var(--accent-glow); color:var(--accent-l); }
+        .stat-icon.cyan { background:var(--cyan-bg); color:var(--cyan); }
+        .stat-icon.green { background:var(--green-bg); color:var(--green); }
+        .stat-icon.amber { background:var(--amber-bg); color:var(--amber); }
+
+        .stat-text .label { font-size:12px; color:var(--text-3); font-weight:500; margin-bottom:2px; }
+        .stat-text .value { font-size:22px; font-weight:800; letter-spacing:-.5px; }
+        .stat-text .sub { font-size:11px; color:var(--green); font-weight:600; margin-top:2px; display:flex; align-items:center; gap:3px; }
+        .stat-text .sub i { width:12px; height:12px; }
+
+        /* Section headers */
+        .sec-head {
+            display:flex; align-items:center; justify-content:space-between;
+            margin-bottom:18px;
+        }
+        .sec-head h2 { font-size:18px; font-weight:700; }
+        .sec-head .sec-link {
+            font-size:13px; font-weight:600; color:var(--accent-l);
+            display:flex; align-items:center; gap:4px;
+            transition:var(--transition);
+        }
+        .sec-head .sec-link:hover { color:var(--text-1); }
+        .sec-head .sec-link i { width:14px; height:14px; }
+
+        /* Service / Category Cards */
+        .services-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
+            gap:14px;
+            margin-bottom:40px;
+        }
+
+        .svc-card {
+            background:var(--bg-2);
+            border:1px solid var(--border);
+            border-radius:var(--radius-s);
+            padding:22px;
+            cursor:pointer;
+            transition:var(--transition);
+            position:relative;
+            overflow:hidden;
+        }
+
+        .svc-card::after {
+            content:'';
+            position:absolute; inset:0;
+            border-radius:var(--radius-s);
+            opacity:0;
+            transition:var(--transition);
+            box-shadow: inset 0 0 0 2px var(--accent);
+        }
+
+        .svc-card:hover { background:var(--bg-3); transform:translateY(-2px); }
+        .svc-card:hover::after { opacity:1; }
+
+        .svc-icon {
+            width:44px; height:44px;
+            border-radius:var(--radius-xs);
+            display:flex; align-items:center; justify-content:center;
+            margin-bottom:14px;
+        }
+        .svc-icon i { width:22px; height:22px; }
+
+        .svc-card h3 { font-size:15px; font-weight:700; margin-bottom:6px; }
+        .svc-card p { font-size:13px; color:var(--text-2); line-height:1.6; margin-bottom:14px; }
+
+        .svc-footer {
+            display:flex; justify-content:space-between; align-items:center;
+            font-size:12px; color:var(--text-3); font-weight:500;
+        }
+        .svc-footer span { display:flex; align-items:center; gap:4px; }
+        .svc-footer i { width:13px; height:13px; }
+        .svc-footer .price { color:var(--green); font-weight:700; }
+
+        /* How it works — horizontal timeline */
+        .timeline {
+            display:flex;
+            gap:0;
+            margin-bottom:40px;
+            overflow-x:auto;
+            padding-bottom:4px;
+        }
+
+        .tl-step {
+            flex:1;
+            min-width:180px;
+            padding:20px;
+            position:relative;
+        }
+
+        .tl-step::before {
+            content:'';
+            position:absolute; top:36px; left:50px; right:-10px;
+            height:2px;
+            background:var(--border);
+        }
+        .tl-step:last-child::before { display:none; }
+
+        .tl-num {
+            width:40px; height:40px;
+            border-radius:50%;
+            background:var(--bg-3);
+            border:2px solid var(--border-strong);
+            display:flex; align-items:center; justify-content:center;
+            margin-bottom:14px;
+            position:relative; z-index:2;
+            color:var(--accent-l);
+        }
+        .tl-num i { width:18px; height:18px; }
+
+        .tl-step h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
+        .tl-step p { font-size:12px; color:var(--text-3); line-height:1.6; }
+
+        /* ======================================================
+           4. CREATE ORDER PAGE
+           ====================================================== */
+        .order-layout {
+            display:grid;
+            grid-template-columns:1fr 340px;
+            gap:20px;
+            align-items:start;
+        }
+
+        .order-panel {
+            background:var(--bg-2);
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            padding:28px;
+        }
+
+        .panel-title {
+            font-size:16px; font-weight:700;
+            margin-bottom:20px;
+            display:flex; align-items:center; gap:8px;
+        }
+        .panel-title i { width:18px; height:18px; color:var(--accent-l); }
+
+        /* --- form elements --- */
+        .fg { margin-bottom:18px; }
+        .fg label {
+            display:block; font-size:12px; font-weight:600;
+            color:var(--text-3); margin-bottom:6px;
+            text-transform:uppercase; letter-spacing:.5px;
+        }
+        .fg label .req { color:var(--rose); }
+
+        .fi {
+            width:100%; padding:11px 14px;
+            background:var(--bg-3);
+            border:1px solid var(--border);
+            border-radius:var(--radius-xs);
+            color:var(--text-1); font-size:14px;
+            outline:none;
+            transition:var(--transition);
+        }
+        .fi:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
+        .fi::placeholder { color:var(--text-3); }
+
+        textarea.fi { resize:vertical; min-height:110px; }
+
+        select.fi {
+            appearance:none;
+            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364647a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat:no-repeat;
+            background-position:right 12px center;
+        }
+        select.fi option { background:var(--bg-2); }
+
+        .fi-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+        /* Chips / Category select */
+        .chip-grid {
+            display:flex; flex-wrap:wrap; gap:8px;
+        }
+
+        .chip {
+            padding:8px 16px;
+            background:var(--bg-3);
+            border:1px solid var(--border);
+            border-radius:50px;
+            font-size:13px; font-weight:500;
+            color:var(--text-2);
+            cursor:pointer;
+            transition:var(--transition);
+            display:flex; align-items:center; gap:6px;
+        }
+        .chip i { width:14px; height:14px; }
+        .chip:hover { border-color:var(--border-strong); color:var(--text-1); }
+        .chip.selected {
+            background:var(--accent-glow);
+            border-color:var(--accent);
+            color:var(--accent-l);
+        }
+
+        /* File drop */
+        .drop-zone {
+            border:2px dashed var(--border);
+            border-radius:var(--radius-s);
+            padding:28px;
+            text-align:center;
+            cursor:pointer;
+            transition:var(--transition);
+            position:relative;
+        }
+        .drop-zone:hover { border-color:var(--accent); background:rgba(109,92,255,.02); }
+        .drop-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+
+        .drop-icon {
+            width:44px; height:44px;
+            border-radius:50%;
+            background:var(--bg-4);
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 10px;
+            color:var(--text-3);
+        }
+        .drop-icon i { width:20px; height:20px; }
+
+        .drop-zone p { font-size:13px; color:var(--text-2); }
+        .drop-zone p strong { color:var(--accent-l); }
+        .drop-zone small { font-size:11px; color:var(--text-3); }
+
+        .thumbs { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+        .thumb {
+            width:64px; height:64px;
+            border-radius:var(--radius-xs);
+            overflow:hidden;
+            border:1px solid var(--border);
+            position:relative;
+        }
+        .thumb img { width:100%; height:100%; object-fit:cover; }
+        .thumb-del {
+            position:absolute; top:2px; right:2px;
+            width:18px; height:18px;
+            background:rgba(0,0,0,.7);
+            border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            color:#fff;
+        }
+        .thumb-del:hover { background:var(--rose); }
+        .thumb-del i { width:10px; height:10px; }
+
+        /* --- sidebar summary --- */
+        .summary-panel {
+            position:sticky;
+            top: calc(var(--header-h) + 28px);
+        }
+
+        .summary-block {
+            background:var(--bg-3);
+            border:1px solid var(--border);
+            border-radius:var(--radius-xs);
+            padding:16px;
+            margin-bottom:16px;
+        }
+
+        .summary-block .s-label {
+            font-size:11px; font-weight:600;
+            color:var(--text-3); text-transform:uppercase;
+            letter-spacing:.5px; margin-bottom:4px;
+        }
+        .summary-block .s-value {
+            font-size:14px; font-weight:600;
+        }
+
+        .summary-total {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:14px 0;
+            border-top:1px solid var(--border);
+            margin-top:8px;
+        }
+        .summary-total .t-label { font-size:13px; color:var(--text-3); }
+        .summary-total .t-val { font-size:20px; font-weight:800; color:var(--accent-l); }
+
+        /* Crypto selector */
+        .crypto-row {
+            display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+            margin-bottom:16px;
+        }
+
+        .crypto-chip {
+            padding:14px 8px;
+            background:var(--bg-3);
+            border:2px solid var(--border);
+            border-radius:var(--radius-xs);
+            text-align:center;
+            cursor:pointer;
+            transition:var(--transition);
+        }
+        .crypto-chip:hover { border-color:var(--border-strong); }
+        .crypto-chip.sel { border-color:var(--accent); background:var(--accent-glow); }
+        .crypto-chip input { display:none; }
+
+        .cc-sym { font-size:20px; font-weight:800; }
+        .cc-name { font-size:11px; color:var(--text-3); font-weight:500; }
+
+        .wallet-box {
+            background:var(--bg-3);
+            border:1px solid var(--border);
+            border-radius:var(--radius-xs);
+            padding:14px;
+            margin-bottom:14px;
+        }
+
+        .wallet-label { font-size:11px; color:var(--text-3); margin-bottom:6px; font-weight:600; }
+
+        .wallet-addr {
+            display:flex; align-items:center; gap:8px;
+        }
+        .wallet-addr code {
+            font-family:'JetBrains Mono', monospace;
+            font-size:12px; color:var(--text-1);
+            word-break:break-all; flex:1;
+        }
+
+        .copy-b {
+            width:30px; height:30px;
+            border-radius:var(--radius-xs);
+            background:var(--bg-4);
+            border:1px solid var(--border);
+            display:flex; align-items:center; justify-content:center;
+            color:var(--text-3);
+            flex-shrink:0;
+            transition:var(--transition);
+        }
+        .copy-b:hover { color:var(--accent-l); border-color:var(--accent); }
+        .copy-b i { width:13px; height:13px; }
+
+        .warn-box {
+            padding:10px 14px;
+            background:var(--amber-bg);
+            border:1px solid rgba(251,191,36,.15);
+            border-radius:var(--radius-xs);
+            font-size:12px; color:var(--amber);
+            display:flex; align-items:flex-start; gap:8px;
+            margin-bottom:16px;
+        }
+        .warn-box i { width:14px; height:14px; flex-shrink:0; margin-top:1px; }
+
+        /* --- buttons --- */
+        .form-foot {
+            display:flex; justify-content:space-between; align-items:center;
+            margin-top:24px;
+            padding-top:18px;
+            border-top:1px solid var(--border);
+        }
+
+        .btn-flat {
+            padding:10px 22px;
+            font-size:14px; font-weight:600;
+            color:var(--text-3);
+            border-radius:var(--radius-xs);
+            display:flex; align-items:center; gap:6px;
+            transition:var(--transition);
+        }
+        .btn-flat:hover { color:var(--text-1); background:var(--bg-3); }
+        .btn-flat i { width:16px; height:16px; }
+
+        .btn-fill {
+            padding:10px 24px;
+            background:var(--accent);
+            color:#fff;
+            border-radius:var(--radius-xs);
+            font-size:14px; font-weight:600;
+            display:flex; align-items:center; gap:6px;
+            transition:var(--transition);
+        }
+        .btn-fill:hover { background:var(--accent-l); }
+        .btn-fill i { width:16px; height:16px; }
+
+        .btn-fill.green { background:var(--green); }
+        .btn-fill.green:hover { background:#2cc48a; }
+
+        /* ======================================================
+           5. MY ORDERS PAGE
+           ====================================================== */
+        .orders-toolbar {
+            display:flex; align-items:center; justify-content:space-between;
+            margin-bottom:18px;
+            flex-wrap:wrap; gap:12px;
+        }
+
+        .filter-tabs { display:flex; gap:4px; }
+
+        .ftab {
+            padding:7px 16px;
+            border-radius:50px;
+            font-size:13px; font-weight:600;
+            color:var(--text-3);
+            transition:var(--transition);
+        }
+        .ftab:hover { color:var(--text-2); background:var(--bg-3); }
+        .ftab.active { color:var(--text-1); background:var(--bg-4); }
+
+        .orders-table {
+            background:var(--bg-2);
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            overflow:hidden;
+        }
+
+        .ot-head {
+            display:grid;
+            grid-template-columns: 44px 2fr 1fr 1fr 120px;
+            gap:12px;
+            padding:12px 20px;
+            border-bottom:1px solid var(--border);
+            font-size:11px; font-weight:600;
+            color:var(--text-3);
+            text-transform:uppercase;
+            letter-spacing:.5px;
+        }
+
+        .ot-row {
+            display:grid;
+            grid-template-columns: 44px 2fr 1fr 1fr 120px;
+            gap:12px;
+            padding:14px 20px;
+            align-items:center;
+            transition:var(--transition);
+            border-bottom:1px solid var(--border-subtle);
+        }
+        .ot-row:last-child { border-bottom:none; }
+        .ot-row:hover { background:var(--bg-3); }
+
+        .ot-icon {
+            width:38px; height:38px;
+            border-radius:var(--radius-xs);
+            display:flex; align-items:center; justify-content:center;
+        }
+        .ot-icon i { width:18px; height:18px; }
+
+        .ot-name { font-size:14px; font-weight:600; }
+        .ot-sub { font-size:12px; color:var(--text-3); display:flex; align-items:center; gap:6px; margin-top:2px; }
+        .ot-sub i { width:12px; height:12px; }
+
+        .ot-date { font-size:13px; color:var(--text-2); }
+        .ot-price { font-size:14px; font-weight:700; }
+        .ot-price small { display:block; font-size:11px; color:var(--text-3); font-weight:500; }
+
+        .badge {
+            display:inline-flex; align-items:center; gap:4px;
+            padding:4px 10px;
+            border-radius:50px;
+            font-size:11px; font-weight:600;
+        }
+        .badge i { width:12px; height:12px; }
+        .badge.pending { background:var(--amber-bg); color:var(--amber); }
+        .badge.progress { background:var(--sky-bg); color:var(--sky); }
+        .badge.done { background:var(--green-bg); color:var(--green); }
+        .badge.cancelled { background:var(--rose-bg); color:var(--rose); }
+
+        /* ======================================================
+           6. SUCCESS OVERLAY
+           ====================================================== */
+        .success-overlay {
+            display:none;
+            position:fixed; inset:0;
+            background:rgba(6,6,11,.85);
+            backdrop-filter:blur(12px);
+            z-index:200;
+            align-items:center; justify-content:center;
+        }
+        .success-overlay.show { display:flex; }
+
+        .success-modal {
+            background:var(--bg-2);
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            padding:48px;
+            text-align:center;
+            max-width:440px;
+            width:90%;
+            box-shadow:0 20px 60px rgba(0,0,0,.5);
+        }
+
+        .success-check {
+            width:72px; height:72px;
+            border-radius:50%;
+            background:var(--green-bg);
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 20px;
+            color:var(--green);
+        }
+        .success-check i { width:36px; height:36px; }
+
+        .success-modal h3 { font-size:22px; font-weight:800; margin-bottom:8px; }
+        .success-modal p { font-size:14px; color:var(--text-2); margin-bottom:20px; }
+
+        .order-hash {
+            display:inline-flex; align-items:center; gap:6px;
+            padding:8px 16px;
+            background:var(--bg-3);
+            border:1px solid var(--border);
+            border-radius:var(--radius-xs);
+            font-family:'JetBrains Mono', monospace;
+            font-size:14px; font-weight:600;
+            margin-bottom:24px;
+        }
+        .order-hash i { width:14px; height:14px; color:var(--accent-l); }
+
+        /* ======================================================
+           7. TOAST
+           ====================================================== */
+        .toast {
+            position:fixed; bottom:20px; right:20px; z-index:300;
+            padding:12px 18px;
+            background:var(--bg-3);
+            border:1px solid var(--border);
+            border-radius:var(--radius-xs);
+            box-shadow:0 8px 30px rgba(0,0,0,.4);
+            display:flex; align-items:center; gap:8px;
+            font-size:13px; font-weight:500;
+            transform:translateY(80px); opacity:0;
+            transition:all .3s ease;
+        }
+        .toast.show { transform:translateY(0); opacity:1; }
+        .toast i { width:16px; height:16px; flex-shrink:0; }
+        .toast.ok i { color:var(--green); }
+        .toast.err i { color:var(--rose); }
+
+        /* ======================================================
+           8. RESPONSIVE
+           ====================================================== */
+        @media (max-width:1024px) {
+            .order-layout { grid-template-columns:1fr; }
+            .summary-panel { position:static; }
+        }
+
+        @media (max-width:768px) {
+            .sidebar { transform:translateX(-100%); }
+            .sidebar.open { transform:translateX(0); }
+            .main { margin-left:0; }
+            .mobile-toggle { display:flex; }
+            .content { padding:20px 16px; }
+            .topbar { padding:0 16px; }
+            .ot-head, .ot-row {
+                grid-template-columns:38px 1fr 100px;
+            }
+            .ot-head > :nth-child(3),
+            .ot-head > :nth-child(4),
+            .ot-row > :nth-child(3),
+            .ot-row > :nth-child(4) { display:none; }
+            .stat-row { grid-template-columns:1fr 1fr; }
+            .services-grid { grid-template-columns:1fr; }
+            .crypto-row { grid-template-columns:1fr; }
+            .fi-row { grid-template-columns:1fr; }
+            .timeline { flex-direction:column; }
+            .tl-step::before { display:none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><i data-lucide="zap"></i></div>
+            <div class="sidebar-brand">Crypto<span>Hub</span></div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-label">Головне</div>
+            <div class="nav-item active" onclick="navigateTo('home', this)">
+                <i data-lucide="layout-dashboard"></i> Дашборд
+            </div>
+            <div class="nav-item" onclick="navigateTo('create', this)">
+                <i data-lucide="plus-circle"></i> Нове замовлення
+            </div>
+            <div class="nav-item" onclick="navigateTo('orders', this)">
+                <i data-lucide="package"></i> Мої замовлення
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-label">Каталог</div>
+            <div class="nav-item" onclick="navigateTo('home', this); scrollToEl('svc-section')">
+                <i data-lucide="grid-3x3"></i> Послуги
+            </div>
+            <div class="nav-item" onclick="navigateTo('home', this); scrollToEl('how-section')">
+                <i data-lucide="info"></i> Як це працює
+            </div>
+
+            <div class="nav-divider"></div>
+            <div class="nav-label">Підтримка</div>
+            <div class="nav-item">
+                <i data-lucide="message-circle"></i> Чат з менеджером
+            </div>
+            <div class="nav-item">
+                <i data-lucide="life-buoy"></i> FAQ
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="user-avatar">D</div>
+                <div class="user-info">
+                    <div class="user-name">D1ther</div>
+                    <div class="user-tag">Клієнт</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ========== MAIN ========== -->
+    <div class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-btn mobile-toggle" onclick="toggleSidebar()">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="breadcrumb" id="breadcrumb">
+                    <i data-lucide="home"></i>
+                    <span>/</span>
+                    <span class="current" id="bc-page">Дашборд</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-btn">
+                    <i data-lucide="search"></i>
+                </button>
+                <button class="topbar-btn">
+                    <i data-lucide="bell"></i>
+                    <span class="notif-dot"></span>
+                </button>
+                <button class="topbar-btn">
+                    <i data-lucide="settings"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <div class="content">
+
+            <!-- ===== HOME PAGE ===== -->
+            <div class="page active" id="page-home">
+
+                <!-- Hero -->
+                <div class="dash-hero">
+                    <h1>Замовляйте. Платіть у <span class="grad">крипті</span>.</h1>
+                    <p>Професійна біржа послуг з анонімною оплатою у Bitcoin, Ethereum та USDT. Від ідеї до результату — без зайвих кроків.</p>
+                    <div class="hero-btns">
+                        <button class="btn-glow" onclick="navigateTo('create')">
+                            <i data-lucide="plus"></i> Нове замовлення
+                        </button>
+                        <button class="btn-ghost" onclick="scrollToEl('svc-section')">
+                            <i data-lucide="grid-3x3"></i> Переглянути послуги
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="stat-row">
+                    <div class="stat-card">
+                        <div class="stat-icon purple"><i data-lucide="briefcase"></i></div>
+                        <div class="stat-text">
+                            <div class="label">Всього замовлень</div>
+                            <div class="value">3,412</div>
+                            <div class="sub"><i data-lucide="trending-up"></i> +12% цього місяця</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon cyan"><i data-lucide="users"></i></div>
+                        <div class="stat-text">
+                            <div class="label">Виконавців</div>
+                            <div class="value">230+</div>
+                            <div class="sub"><i data-lucide="trending-up"></i> Верифіковані</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i data-lucide="star"></i></div>
+                        <div class="stat-text">
+                            <div class="label">Середня оцінка</div>
+                            <div class="value">4.92</div>
+                            <div class="sub"><i data-lucide="trending-up"></i> з 5.0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon amber"><i data-lucide="timer"></i></div>
+                        <div class="stat-text">
+                            <div class="label">Середній час</div>
+                            <div class="value">4.2д</div>
+                            <div class="sub"><i data-lucide="trending-up"></i> На виконання</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services -->
+                <div id="svc-section">
+                    <div class="sec-head">
+                        <h2>Категорії послуг</h2>
+                        <button class="sec-link" onclick="navigateTo('create')">
+                            Замовити зараз <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="services-grid">
+                        <div class="svc-card" onclick="selectCategoryAndGo('web')">
+                            <div class="svc-icon" style="background:var(--accent-glow); color:var(--accent-l);">
+                                <i data-lucide="code-2"></i>
+                            </div>
+                            <h3>Веб-розробка</h3>
+                            <p>Лендінги, SPA, інтернет-магазини, корпоративні сайти та веб-застосунки будь-якої складності.</p>
+                            <div class="svc-footer">
+                                <span><i data-lucide="clock"></i> від 3 днів</span>
+                                <span class="price"><i data-lucide="tag"></i> від $200</span>
+                            </div>
+                        </div>
+
+                        <div class="svc-card" onclick="selectCategoryAndGo('mobile')">
+                            <div class="svc-icon" style="background:var(--sky-bg); color:var(--sky);">
+                                <i data-lucide="smartphone"></i>
+                            </div>
+                            <h3>Мобільна розробка</h3>
+                            <p>Нативні та кросплатформні додатки для iOS і Android: React Native, Flutter, Swift, Kotlin.</p>
+                            <div class="svc-footer">
+                                <span><i data-lucide="clock"></i> від 7 днів</span>
+                                <span class="price"><i data-lucide="tag"></i> від $500</span>
+                            </div>
+                        </div>
+
+                        <div class="svc-card" onclick="selectCategoryAndGo('design')">
+                            <div class="svc-icon" style="background:var(--green-bg); color:var(--green);">
+                                <i data-lucide="palette"></i>
+                            </div>
+                            <h3>UI/UX Дизайн</h3>
+                            <p>Інтерфейси, логотипи, брендбуки, банери, ілюстрації, презентації та друкована продукція.</p>
+                            <div class="svc-footer">
+                                <span><i data-lucide="clock"></i> від 2 днів</span>
+                                <span class="price"><i data-lucide="tag"></i> від $100</span>
+                            </div>
+                        </div>
+
+                        <div class="svc-card" onclick="selectCategoryAndGo('bot')">
+                            <div class="svc-icon" style="background:var(--amber-bg); color:var(--amber);">
+                                <i data-lucide="bot"></i>
+                            </div>
+                            <h3>Боти та автоматизація</h3>
+                            <p>Telegram-боти, Discord-боти, парсери, скрипти, інтеграції з API та автоматизація процесів.</p>
+                            <div class="svc-footer">
+                                <span><i data-lucide="clock"></i> від 2 днів</span>
+                                <span class="price"><i data-lucide="tag"></i> від $150</span>
+                            </div>
+                        </div>
+
+                        <div class="svc-card" onclick="selectCategoryAndGo('blockchain')">
+                            <div class="svc-icon" style="background:var(--accent-glow); color:var(--accent-l);">
+                                <i data-lucide="link"></i>
+                            </div>
+                            <h3>Блокчейн & Web3</h3>
+                            <p>Смарт-контракти (Solidity), DApp, токени ERC-20/721, NFT-маркетплейси, DeFi-протоколи.</p>
+                            <div class="svc-footer">
+                                <span><i data-lucide="clock"></i> від 7 днів</span>
+                                <span class="price"><i data-lucide="tag"></i> від $800</span>
+                            </div>
+                        </div>
+
+                        <div class="svc-card" onclick="selectCategoryAndGo('marketing')">
+                            <div class="svc-icon" style="background:var(--rose-bg); color:var(--rose);">
+                                <i data-lucide="megaphone"></i>
+                            </div>
+                            <h3>Маркетинг & SMM</h3>
+                            <p>SEO-оптимізація, таргетована реклама, контент-стратегії, email-маркетинг, аналітика.</p>
+                            <div class="svc-footer">
+                                <span><i data-lucide="clock"></i> від 5 днів</span>
+                                <span class="price"><i data-lucide="tag"></i> від $300</span>
+                            </div>
+                        </div>
+
+                        <div class="svc-card" onclick="selectCategoryAndGo('devops')">
+                            <div class="svc-icon" style="background:var(--cyan-bg); color:var(--cyan);">
+                                <i data-lucide="server"></i>
+                            </div>
+                            <h3>DevOps & Сервери</h3>
+                            <p>CI/CD, Docker, Kubernetes, налаштування VPS/VDS, моніторинг, безпека інфраструктури.</p>
+                            <div class="svc-footer">
+                                <span><i data-lucide="clock"></i> від 1 дня</span>
+                                <span class="price"><i data-lucide="tag"></i> від $100</span>
+                            </div>
+                        </div>
+
+                        <div class="svc-card" onclick="selectCategoryAndGo('other')">
+                            <div class="svc-icon" style="background:var(--green-bg); color:var(--green);">
+                                <i data-lucide="puzzle"></i>
+                            </div>
+                            <h3>Інше</h3>
+                            <p>Консультації, аудит коду, написання ТЗ, тестування, навчання та будь-які інші задачі.</p>
+                            <div class="svc-footer">
+                                <span><i data-lucide="clock"></i> індивідуально</span>
+                                <span class="price"><i data-lucide="tag"></i> від $50</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How it works -->
+                <div id="how-section" style="margin-top:20px;">
+                    <div class="sec-head">
+                        <h2>Як це працює</h2>
+                    </div>
+                    <div class="timeline">
+                        <div class="tl-step">
+                            <div class="tl-num"><i data-lucide="file-edit"></i></div>
+                            <h4>1. Оформіть замовлення</h4>
+                            <p>Оберіть категорію, опишіть задачу, прикріпіть файли та вкажіть бюджет.</p>
+                        </div>
+                        <div class="tl-step">
+                            <div class="tl-num"><i data-lucide="wallet"></i></div>
+                            <h4>2. Оплатіть у крипті</h4>
+                            <p>Відправте оплату в BTC, ETH або USDT на вказану адресу та вставте TX Hash.</p>
+                        </div>
+                        <div class="tl-step">
+                            <div class="tl-num"><i data-lucide="shield-check"></i></div>
+                            <h4>3. Перевірка менеджером</h4>
+                            <p>Менеджер верифікує транзакцію протягом 30 хвилин і передає в роботу.</p>
+                        </div>
+                        <div class="tl-step">
+                            <div class="tl-num"><i data-lucide="rocket"></i></div>
+                            <h4>4. Отримайте результат</h4>
+                            <p>Виконавець доставить готову роботу у вказаний термін з гарантією якості.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== CREATE ORDER PAGE ===== -->
+            <div class="page" id="page-create">
+                <div class="order-layout">
+
+                    <!-- Left: Form -->
+                    <div class="order-panel">
+                        <div class="panel-title"><i data-lucide="file-plus-2"></i> Нове замовлення</div>
+
+                        <!-- Step 1 -->
+                        <div class="form-step active" id="cs-1">
+                            <div class="fg">
+                                <label>Категорія <span class="req">*</span></label>
+                                <div class="chip-grid" id="chipGrid">
+                                    <div class="chip" data-val="web" onclick="pickChip(this)"><i data-lucide="code-2"></i> Веб</div>
+                                    <div class="chip" data-val="mobile" onclick="pickChip(this)"><i data-lucide="smartphone"></i> Мобільна</div>
+                                    <div class="chip" data-val="design" onclick="pickChip(this)"><i data-lucide="palette"></i> Дизайн</div>
+                                    <div class="chip" data-val="bot" onclick="pickChip(this)"><i data-lucide="bot"></i> Боти</div>
+                                    <div class="chip" data-val="blockchain" onclick="pickChip(this)"><i data-lucide="link"></i> Web3</div>
+                                    <div class="chip" data-val="marketing" onclick="pickChip(this)"><i data-lucide="megaphone"></i> Маркетинг</div>
+                                    <div class="chip" data-val="devops" onclick="pickChip(this)"><i data-lucide="server"></i> DevOps</div>
+                                    <div class="chip" data-val="other" onclick="pickChip(this)"><i data-lucide="puzzle"></i> Інше</div>
+                                </div>
+                            </div>
+
+                            <div class="fg">
+                                <label>Назва проєкту <span class="req">*</span></label>
+                                <input type="text" class="fi" id="cTitle" placeholder="Наприклад: DeFi Dashboard для стартапу">
+                            </div>
+
+                            <div class="fg">
+                                <label>Детальний опис <span class="req">*</span></label>
+                                <textarea class="fi" id="cDesc" placeholder="Що саме потрібно зробити? Які вимоги, технології, побажання?"></textarea>
+                            </div>
+
+                            <div class="fi-row">
+                                <div class="fg">
+                                    <label>Бюджет (USD) <span class="req">*</span></label>
+                                    <input type="number" class="fi" id="cBudget" placeholder="500" min="10">
+                                </div>
+                                <div class="fg">
+                                    <label>Дедлайн</label>
+                                    <input type="date" class="fi" id="cDeadline">
+                                </div>
+                            </div>
+
+                            <div class="fg">
+                                <label>Telegram для зв'язку <span class="req">*</span></label>
+                                <input type="text" class="fi" id="cContact" placeholder="@username">
+                            </div>
+
+                            <div class="fg">
+                                <label>Файли (за потреби)</label>
+                                <div class="drop-zone" id="dropZone">
+                                    <input type="file" id="cFiles" multiple accept="image/*,.pdf,.zip,.rar,.doc,.docx,.figma">
+                                    <div class="drop-icon"><i data-lucide="upload-cloud"></i></div>
+                                    <p>Перетягніть або <strong>оберіть файли</strong></p>
+                                    <small>PNG, JPG, PDF, ZIP, Figma — до 10 МБ</small>
+                                </div>
+                                <div class="thumbs" id="cThumbs"></div>
+                            </div>
+
+                            <div class="form-foot">
+                                <button class="btn-flat" onclick="navigateTo('home')">
+                                    <i data-lucide="arrow-left"></i> Скасувати
+                                </button>
+                                <button class="btn-fill" onclick="goStep(2)">
+                                    Далі — Оплата <i data-lucide="arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="form-step" id="cs-2">
+                            <div class="fg">
+                                <label>Оберіть криптовалюту</label>
+                                <div class="crypto-row">
+                                    <div class="crypto-chip sel" onclick="pickCrypto(this,'btc')">
+                                        <div class="cc-sym">₿</div>
+                                        <div class="cc-name">Bitcoin</div>
+                                    </div>
+                                    <div class="crypto-chip" onclick="pickCrypto(this,'eth')">
+                                        <div class="cc-sym">Ξ</div>
+                                        <div class="cc-name">Ethereum</div>
+                                    </div>
+                                    <div class="crypto-chip" onclick="pickCrypto(this,'usdt')">
+                                        <div class="cc-sym">₮</div>
+                                        <div class="cc-name">USDT TRC-20</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wallet-box">
+                                <div class="wallet-label">Адреса для оплати</div>
+                                <div class="wallet-addr">
+                                    <code id="wAddr">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</code>
+                                    <button class="copy-b" onclick="copyW()"><i data-lucide="copy"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="warn-box">
+                                <i data-lucide="alert-triangle"></i>
+                                <span>Після оплати вставте TX Hash нижче. Менеджер верифікує транзакцію протягом 30 хвилин і зв'яжеться з вами у Telegram.</span>
+                            </div>
+
+                            <div class="fg">
+                                <label>TX Hash (ідентифікатор транзакції) <span class="req">*</span></label>
+                                <input type="text" class="fi mono" id="cTxHash" placeholder="0x1a2b3c4d5e6f7890...">
+                            </div>
+
+                            <div class="form-foot">
+                                <button class="btn-flat" onclick="goStep(1)">
+                                    <i data-lucide="arrow-left"></i> Назад
+                                </button>
+                                <button class="btn-fill green" onclick="submitNewOrder()">
+                                    <i data-lucide="send"></i> Відправити замовлення
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Summary -->
+                    <div class="order-panel summary-panel">
+                        <div class="panel-title"><i data-lucide="receipt"></i> Підсумок</div>
+
+                        <div class="summary-block">
+                            <div class="s-label">Категорія</div>
+                            <div class="s-value" id="sCategory">—</div>
+                        </div>
+                        <div class="summary-block">
+                            <div class="s-label">Проєкт</div>
+                            <div class="s-value" id="sTitle">—</div>
+                        </div>
+                        <div class="summary-block">
+                            <div class="s-label">Дедлайн</div>
+                            <div class="s-value" id="s
