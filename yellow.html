@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фріланс Топ ЮА - Клієнтська панель</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --golden-yellow: #FBBF24;
+            --bright-yellow: #FCD34D;
+            --amber: #F59E0B;
+            --orange-yellow: #FBBF24;
+            --light-yellow: #FDE68A;
+            --space-dark: #1F1A0A;
+            --space-medium: #292114;
+            --space-card: #35291A;
+            --space-border: rgba(251, 191, 36, 0.15);
+            --text-white: #FFFFFF;
+            --text-gray: #E0D3B8;
+            --text-dim: #A8937D;
+            --glow-yellow: rgba(251, 191, 36, 0.4);
+            --glow-amber: rgba(245, 158, 11, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: var(--space-dark);
+            color: var(--text-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cosmic Background */
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 10%, rgba(251, 191, 36, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(245, 158, 11, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 80%, rgba(252, 211, 77, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #1F1A0A 0%, #241F14 100%);
+            z-index: 0;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            background: #FDE68A;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Animated gradient orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+            animation: float-orb 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--golden-yellow);
+            top: -100px;
+            right: -100px;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--amber);
+            bottom: -80px;
+            left: -80px;
+            animation-delay: -10s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--bright-yellow);
+            top: 40%;
+            left: 50%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float-orb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -20px) scale(1.1); }
+            50% { transform: translate(-15px, 15px) scale(0.95); }
+            75% { transform: translate(15px, -10px) scale(1.05); }
+        }
+
+        /* Container */
+        .mobile-container {
+            position: relative;
+            z-index: 10;
+            max-width: 428px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: rgba(31, 26, 10, 0.4);
+            backdrop-filter: blur(40px);
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            padding: 60px 24px 40px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--golden-yellow);
+        }
+
+        .logo-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--golden-yellow), var(--amber));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 
+                0 8px 32px rgba(251, 191, 36, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            border: 3px solid white;
+            border-radius: 8px;
+            transform: rotate(45deg);
+        }
+
+        .logo::after {
+            content: 'F';
+            position: absolute;
+            font-family: 'Unbounded', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            transform: rotate(0deg);
+        }
+
+        .logo-text {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--golden-yellow), var(--amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            font-size: 15px;
+            color: var(--text-gray);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        /* Categories Grid */
+        .categories-section {
+            padding: 0 24px 120px;
+        }
+
+        .category-card {
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0.02) 100%
+            );
+            border: 1px solid var(--space-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .category-card:nth-child(1) { animation-delay: 0.1s; }
+        .category-card:nth-child(2) { animation-delay: 0.15s; }
+        .category-card:nth-child(3) { animation-delay: 0.2s; }
+        .category-card:nth-child(4) { animation-delay: 0.25s; }
+        .category-card:nth-child(5) { animation-delay: 0.3s; }
+        .category-card:nth-child(6) { animation-delay: 0.35s; }
+        .category-card:nth-child(7) { animation-delay: 0.4s; }
+        .category-card:nth-child(8) { animation-delay: 0.45s; }
+        .category-card:nth-child(9) { animation-delay: 0.5s; }
+        .category-card:nth-child(10) { animation-delay: 0.55s; }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: left 0.6s;
+        }
+
+        .category-card:hover::before {
+            left: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateX(8px);
+            border-color: var(--golden-yellow);
+            box-shadow: 
+                0 8px 32px rgba(251, 191, 36, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .category-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.4s;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .category-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            opacity: 0.1;
+        }
+
+        .icon-programming { background: linear-gradient(135deg, #D97706 0%, #F59E0B 100%); }
+        .icon-programming::before { background: #D97706; }
+
+        .icon-design { background: linear-gradient(135deg, #FBBF24 0%, #FCD34D 100%); }
+        .icon-design::before { background: #FBBF24; }
+
+        .icon-services { background: linear-gradient(135deg, #B45309 0%, #D97706 100%); }
+        .icon-services::before { background: #B45309; }
+
+        .icon-media { background: linear-gradient(135deg, #FCD34D 0%, #FDE68A 100%); }
+        .icon-media::before { background: #FCD34D; }
+
+        .icon-promotion { background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%); }
+        .icon-promotion::before { background: #F59E0B; }
+
+        .icon-architecture { background: linear-gradient(135deg, #D97706 0%, #F59E0B 100%); }
+        .icon-architecture::before { background: #D97706; }
+
+        .icon-mobile { background: linear-gradient(135deg, #FDE68A 0%, #FEF3C7 100%); }
+        .icon-mobile::before { background: #FDE68A; }
+
+        .icon-admin { background: linear-gradient(135deg, #78350F 0%, #92400E 100%); }
+        .icon-admin::before { background: #78350F; }
+
+        .icon-outsourcing { background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%); }
+        .icon-outsourcing::before { background: #F59E0B; }
+
+        .icon-translation { background: linear-gradient(135deg, #FCD34D 0%, #FDE68A 100%); }
+        .icon-translation::before { background: #FCD34D; }
+
+        .category-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .category-content {
+            flex: 1;
+        }
+
+        .category-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-white);
+        }
+
+        .category-description {
+            font-size: 13px;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+
+        .category-arrow {
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .category-card:hover .category-arrow {
+            background: rgba(251, 191, 36, 0.2);
+            transform: translateX(4px);
+        }
+
+        .category-arrow svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-gray);
+        }
+
+        /* Publish Button */
+        .publish-section {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 428px;
+            padding: 20px 24px 40px;
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                rgba(31, 26, 10, 0.95) 20%,
+                rgba(31, 26, 10, 0.98) 100%
+            );
+            backdrop-filter: blur(20px);
+            z-index: 100;
+        }
+
+        .publish-btn {
+            width: 100%;
+            height: 64px;
+            background: linear-gradient(135deg, var(--golden-yellow), var(--amber));
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+            font-family: 'Manrope', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 12px 40px rgba(251, 191, 36, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .publish-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: left 0.6s;
+        }
+
+        .publish-btn:hover::before {
+            left: 100%;
+        }
+
+        .publish-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 16px 48px rgba(251, 191, 36, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .publish-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .publish-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .publish-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 428px) {
+            .mobile-container {
+                border-radius: 0;
+            }
+        }
+
+        /* Add some stars dynamically via JS */
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div>
+    <div class="stars" id="stars"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="mobile-container">
+        <!-- Header -->
+        <header class="header">
+            <button class="close-btn" aria-label="Close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            
+            <div class="logo-container">
+                <div class="logo"></div>
+                <div class="logo-text">ФРІЛАНС<br>ТОП ЮА</div>
+            </div>
+            
+            <p class="tagline">Оберіть категорію для вашого проєкту</p>
+        </header>
+
+        <!-- Categories -->
+        <section class="categories-section">
+            <!-- Programming -->
+            <div class="category-card">
+                <div class="category-icon icon-programming">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Програмування</div>
+                    <div class="category-description">Веб, мобільні додатки, backend</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Design -->
+            <div class="category-card">
+                <div class="category-icon icon-design">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                        <path d="M2 2l7.586 7.586"></path>
+                        <circle cx="11" cy="11" r="2"></circle>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Дизайн та арт</div>
+                    <div class="category-description">UI/UX, ілюстрації, брендинг</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div class="category-card">
+                <div class="category-icon icon-services">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Послуги</div>
+                    <div class="category-description">Консалтинг, копірайтинг, SEO</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Media -->
+            <div class="category-card">
+                <div class="category-icon icon-media">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Фото, аудіо та відео</div>
+                    <div class="category-description">Монтаж, фотографія, озвучка</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Promotion -->
+            <div class="category-card">
+                <div class="category-icon icon-promotion">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Просування</div>
+                    <div class="category-description">SMM, реклама, маркетинг</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Architecture -->
+            <div class="category-card">
+                <div class="category-icon icon-architecture">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Архітектура та інжиніринг</div>
+                    <div class="category-description">3D моделювання, креслення</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Mobile Apps -->
+            <div class="category-card">
+                <div class="category-icon icon-mobile">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Мобільні додатки</div>
+                    <div class="category-description">iOS, Android, кросплатформа</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Administration -->
+            <div class="category-card">
+                <div class="category-icon icon-admin">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Адміністрування</div>
+                    <div class="category-description">DevOps, системи, безпека</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Outsourcing -->
+            <div class="category-card">
+                <div class="category-icon icon-outsourcing">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Аутсорсінг та консалтинг</div>
+                    <div class="category-description">Бізнес-процеси, стратегія</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Translation -->
+            <div class="category-card">
+                <div class="category-icon icon-translation">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                </div>
+                <div class="category-content">
+                    <div class="category-name">Переклади</div>
+                    <div class="category-description">Технічні, художні тексти</div>
+                </div>
+                <div class="category-arrow">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Publish Button -->
+        <section class="publish-section">
+            <button class="publish-btn">
+                <div class="publish-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </div>
+                Опублікувати проєкт
+            </button>
+        </section>
+    </div>
+
+    <script>
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        const starCount = 80;
+        
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 2 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Category card interactions
+        const categoryCards = document.querySelectorAll('.category-card');
+        
+        categoryCards.forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove active state from all cards
+                categoryCards.forEach(c => c.style.transform = '');
+                
+                // Add pulse effect
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'translateX(8px)';
+                }, 100);
+                
+                // Here you would navigate to the category details page
+                console.log('Selected category:', this.querySelector('.category-name').textContent);
+            });
+        });
+
+        // Publish button
+        const publishBtn = document.querySelector('.publish-btn');
+        publishBtn.addEventListener('click', function() {
+            // Add click animation
+            this.style.transform = 'translateY(-2px) scale(0.98)';
+            setTimeout(() => {
+                this.style.transform = 'translateY(-4px)';
+            }, 150);
+            
+            console.log('Publish project clicked');
+        });
+
+        // Close button
+        const closeBtn = document.querySelector('.close-btn');
+        closeBtn.addEventListener('click', function() {
+            console.log('Close clicked');
+            // Here you would handle closing/navigation
+        });
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for orbs on scroll
+        let ticking = false;
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    const scrolled = window.pageYOffset;
+                    const orbs = document.querySelectorAll('.orb');
+                    orbs.forEach((orb, index) => {
+                        const speed = 0.1 + (index * 0.05);
+                        orb.style.transform = `translateY(${scrolled * speed}px)`;
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+    </script>
+</body>
+</html>
