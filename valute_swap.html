@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoExchange — Обмiн валют</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0b0e11;
+            --bg-secondary: #1e2329;
+            --bg-tertiary: #2b3139;
+            --bg-card: #181a20;
+            --accent: #f0b90b;
+            --accent-hover: #d4a30a;
+            --accent-glow: rgba(240, 185, 11, 0.15);
+            --text-primary: #eaecef;
+            --text-secondary: #848e9c;
+            --text-tertiary: #5e6673;
+            --border: #2b3139;
+            --success: #0ecb81;
+            --danger: #f6465d;
+            --input-bg: #2b3139;
+            --radius: 8px;
+            --radius-lg: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===== HEADER / NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(11, 14, 17, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 40px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand i {
+            font-size: 28px;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .navbar-links a {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 4px 0;
+        }
+
+        .navbar-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .navbar-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .navbar-links a:hover::after {
+            width: 100%;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-lg {
+            padding: 14px 36px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 40px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(14, 203, 129, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero-text h1 span {
+            color: var(--accent);
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            max-width: 480px;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 48px;
+        }
+
+        .stat-item {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* ===== EXCHANGE FORM ===== */
+        .exchange-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .exchange-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .exchange-card-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .exchange-card-header .badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(14, 203, 129, 0.12);
+            color: var(--success);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-label i {
+            font-size: 14px;
+            color: var(--accent);
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid transparent;
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .form-select {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid transparent;
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: inherit;
+            transition: var(--transition);
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23848e9c' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+
+        .form-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .form-select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .swap-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 4px 0;
+        }
+
+        .swap-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 3px solid var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+        }
+
+        .swap-btn:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            transform: rotate(180deg);
+        }
+
+        .rate-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .rate-info .rate-label {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rate-info .rate-value {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px var(--accent-glow);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ===== FEATURES SECTION ===== */
+        .section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header h2 span {
+            color: var(--accent);
+        }
+
+        .section-header p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 36px 28px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            border-color: rgba(240, 185, 11, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: var(--accent);
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            position: relative;
+        }
+
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 12.5%;
+            width: 75%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--border));
+            z-index: 0;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .step-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ===== RATES TABLE ===== */
+        .rates-table-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .rates-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .rates-table thead {
+            background: var(--bg-secondary);
+        }
+
+        .rates-table th {
+            padding: 16px 24px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rates-table td {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .rates-table tbody tr {
+            transition: var(--transition);
+        }
+
+        .rates-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .rates-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .currency-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .currency-icon-wrapper {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: var(--accent);
+        }
+
+        .currency-code {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .change-positive {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .change-negative {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 80px 40px 40px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+        }
+
+        .footer-brand h3 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-brand p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 320px;
+            margin-bottom: 24px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            font-size: 16px;
+        }
+
+        .social-link:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+        }
+
+        .footer-column h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-primary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column a {
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-column a i {
+            font-size: 12px;
+            width: 16px;
+            text-align: center;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+            padding-left: 4px;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 48px auto 0;
+            padding-top: 28px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-tertiary);
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-bottom-links a {
+            color: var(--text-tertiary);
+            transition: var(--transition);
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--text-secondary);
+        }
+
+        /* ===== TICKER BAR ===== */
+        .ticker-bar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 0;
+            overflow: hidden;
+            margin-top: 64px;
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: 48px;
+            animation: ticker 30s linear infinite;
+            width: max-content;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .ticker-item .pair {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .ticker-item .price {
+            color: var(--text-secondary);
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ===== MOBILE MENU ===== */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 48px;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 40px;
+            }
+
+            .hero-text p {
+                margin: 0 auto 36px;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+
+            .steps-grid::before {
+                display: none;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 36px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .navbar-links {
+                display: none;
+            }
+
+            .navbar-actions .btn-ghost,
+            .navbar-actions .btn-outline {
+                display: none;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .hero {
+                padding: 100px 20px 60px;
+            }
+
+            .hero-text h1 {
+                font-size: 32px;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .section-header h2 {
+                font-size: 28px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer {
+                padding: 60px 20px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">
+            <i class="fa-solid fa-coins"></i>
+            CryptoExchange
+        </a>
+
+        <ul class="navbar-links">
+            <li><a href="#exchange"><i class="fa-solid fa-arrow-right-arrow-left"></i> Обмiн</a></li>
+            <li><a href="#rates"><i class="fa-solid fa-chart-line"></i> Курси</a></li>
+            <li><a href="#features"><i class="fa-solid fa-shield-halved"></i> Переваги</a></li>
+            <li><a href="#how-it-works"><i class="fa-solid fa-circle-question"></i> Як це працює</a></li>
+            <li><a href="#contacts"><i class="fa-solid fa-envelope"></i> Контакти</a></li>
+        </ul>
+
+        <div class="navbar-actions">
+            <button class="btn btn-ghost">
+                <i class="fa-solid fa-globe"></i> UA
+            </button>
+            <button class="btn btn-outline">
+                <i class="fa-solid fa-right-to-bracket"></i> Увiйти
+            </button>
+            <button class="btn btn-primary">
+                <i class="fa-solid fa-user-plus"></i> Реєстрацiя
+            </button>
+            <button class="mobile-toggle" onclick="document.querySelector('.navbar-links').classList.toggle('show')">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- TICKER BAR -->
+    <div class="ticker-bar">
+        <div class="ticker-track">
+            <div class="ticker-item">
+                <span class="pair">BTC/USDT</span>
+                <span class="price">67,432.50</span>
+                <span class="change-positive"><i class="fa-solid fa-caret-up"></i> +2.14%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">ETH/USDT</span>
+                <span class="price">3,521.80</span>
+                <span class="change-positive"><i class="fa-solid fa-caret-up"></i> +1.87%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">USD/UAH</span>
+                <span class="price">41.25</span>
+                <span class="change-negative"><i class="fa-solid fa-caret-down"></i> -0.32%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">EUR/UAH</span>
+                <span class="price">44.80</span>
+                <span class="change-positive"><i class="fa-solid fa-caret-up"></i> +0.15%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">PLN/UAH</span>
+                <span class="price">10.42</span>
+                <span class="change-negative"><i class="fa-solid fa-caret-down"></i> -0.08%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">GBP/UAH</span>
+                <span class="price">52.10</span>
+                <span class="change-positive"><i class="fa-solid fa-caret-up"></i> +0.44%</span>
+            </div>
+            <!-- Duplicate for seamless loop -->
+            <div class="ticker-item">
+                <span class="pair">BTC/USDT</span>
+                <span class="price">67,432.50</span>
+                <span class="change-positive"><i class="fa-solid fa-caret-up"></i> +2.14%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">ETH/USDT</span>
+                <span class="price">3,521.80</span>
+                <span class="change-positive"><i class="fa-solid fa-caret-up"></i> +1.87%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">USD/UAH</span>
+                <span class="price">41.25</span>
+                <span class="change-negative"><i class="fa-solid fa-caret-down"></i> -0.32%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">EUR/UAH</span>
+                <span class="price">44.80</span>
+                <span class="change-positive"><i class="fa-solid fa-caret-up"></i> +0.15%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">PLN/UAH</span>
+                <span class="price">10.42</span>
+                <span class="change-negative"><i class="fa-solid fa-caret-down"></i> -0.08%</span>
+            </div>
+            <div class="ticker-item">
+                <span class="pair">GBP/UAH</span>
+                <span class="price">52.10</span>
+                <span class="change-positive"><i class="fa-solid fa-caret-up"></i> +0.44%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO + EXCHANGE FORM -->
+    <section class="hero" id="exchange">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Швидкий та надiйний <span>обмiн валют</span> онлайн</h1>
+                <p>Обмiнюйте фiатнi та криптовалюти з найкращими курсами. Миттєвi транзакцiї, мiнiмальнi комiсiї, максимальний захист.</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">150K+</div>
+                        <div class="stat-label">Користувачiв</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">$2.4B</div>
+                        <div class="stat-label">Обсяг обмiнiв</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">30+</div>
+                        <div class="stat-label">Валют</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exchange-card">
+                <div class="exchange-card-header">
+                    <h2><i class="fa-solid fa-arrow-right-arrow-left" style="color: var(--accent); margin-right: 8px;"></i> Обмiн</h2>
+                    <div class="badge">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Онлайн
+                    </div>
+                </div>
+
+                <form id="exchangeForm">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa-solid fa-wallet"></i>
+                            Сума
+                        </label>
+                        <input type="number" class="form-input" placeholder="Введiть суму" min="0" step="0.01" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                                Вiддаю
+                            </label>
+                            <select class="form-select" id="currencyFrom">
+                                <option value="UAH">UAH — Гривня</option>
+                                <option value="USD">USD — Долар</option>
+                                <option value="EUR">EUR — Євро</option>
+                                <option value="PLN">PLN — Злотий</option>
+                                <option value="GBP">GBP — Фунт</option>
+                                <option value="USDT">USDT — Tether</option>
+                                <option value="BTC">BTC — Bitcoin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                                Отримую
+                            </label>
+                            <select class="form-select" id="currencyTo">
+                                <option value="USD">USD — Долар</option>
+                                <option value="UAH">UAH — Гривня</option>
+                                <option value="EUR">EUR — Євро</option>
+                                <option value="PLN">PLN — Злотий</option>
+                                <option value="GBP">GBP — Фунт</option>
+                                <option value="USDT">USDT — Tether</option>
+                                <option value="BTC">BTC — Bitcoin</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="swap-indicator">
+                        <button type="button" class="swap-btn" onclick="swapCurrencies()">
+                            <i class="fa-solid fa-arrow-down-up-across-line"></i>
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa-solid fa-building-columns"></i>
+                            Банк
+                        </label>
+                        <select class="form-select">
+                            <option value="">Оберiть банк</option>
+                            <option value="privat">ПриватБанк</option>
+                            <option value="mono">Monobank</option>
+                            <option value="oschadbank">Ощадбанк</option>
+                            <option value="abank">А-Банк</option>
+                            <option value="pumb">ПУМБ</option>
+                            <option value="ukrsib">УкрСибБанк</option>
+                            <option value="sportbank">Sportbank</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fa-solid fa-user"></i>
+                            Юзернейм
+                        </label>
+                        <input type="text" class="form-input" placeholder="@username або нiкнейм" required>
+                    </div>
+
+                    <div class="rate-info">
+                        <span class="rate-label">
+                            <i class="fa-solid fa-chart-simple"></i> Курс
+                        </span>
+                        <span class="rate-value">1 USD = 41.25 UAH</span>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        Обмiняти
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE RATES -->
+    <section class="section" id="rates">
+        <div class="section-header">
+            <h2>Актуальнi <span>курси</span></h2>
+            <p>Курси валют оновлюються в реальному часi для забезпечення найкращих умов обмiну</p>
+        </div>
+
+        <div class="rates-table-wrapper">
+            <table class="rates-table">
+                <thead>
+                    <tr>
+                        <th>Валюта</th>
+                        <th>Курс (UAH)</th>
+                        <th>Змiна 24г</th>
+                        <th>Мiн / Макс</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="currency-cell">
+                                <div class="currency-icon-wrapper"><i class="fa-solid fa-dollar-sign"></i></div>
+                                <div>
+                                    USD <br><span class="currency-code">Долар США</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>41.25</td>
+                        <td class="change-positive"><i class="fa-solid fa-arrow-trend-up"></i> +0.32%</td>
+                        <td>40.90 / 41.60</td>
+                        <td><button class="btn btn-outline" style="padding: 8px 16px; font-size: 12px;"><i class="fa-solid fa-arrow-right-arrow-left"></i> Обмiн</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="currency-cell">
+                                <div class="currency-icon-wrapper"><i class="fa-solid fa-euro-sign"></i></div>
+                                <div>
+                                    EUR <br><span class="currency-code">Євро</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>44.80</td>
+                        <td class="change-positive"><i class="fa-solid fa-arrow-trend-up"></i> +0.15%</td>
+                        <td>44.50 / 45.10</td>
+                        <td><button class="btn btn-outline" style="padding: 8px 16px; font-size: 12px;"><i class="fa-solid fa-arrow-right-arrow-left"></i> Обмiн</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="currency-cell">
+                                <div class="currency-icon-wrapper"><i class="fa-solid fa-sterling-sign"></i></div>
+                                <div>
+                                    GBP <br><span class="currency-code">Фунт стерлiнгiв</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>52.10</td>
+                        <td class="change-positive"><i class="fa-solid fa-arrow-trend-up"></i> +0.44%</td>
+                        <td>51.80 / 52.40</td>
+                        <td><button class="btn btn-outline" style="padding: 8px 16px; font-size: 12px;"><i class="fa-solid fa-arrow-right-arrow-left"></i> Обмiн</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="currency-cell">
+                                <div class="currency-icon-wrapper"><i class="fa-solid fa-p"></i></div>
+                                <div>
+                                    PLN <br><span class="currency-code">Злотий</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>10.42</td>
+                        <td class="change-negative"><i class="fa-solid fa-arrow-trend-down"></i> -0.08%</td>
+                        <td>10.35 / 10.55</td>
+                        <td><button class="btn btn-outline" style="padding: 8px 16px; font-size: 12px;"><i class="fa-solid fa-arrow-right-arrow-left"></i> Обмiн</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="currency-cell">
+                                <div class="currency-icon-wrapper"><i class="fa-brands fa-bitcoin"></i></div>
+                                <div>
+                                    BTC <br><span class="currency-code">Bitcoin</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>2,781,591</td>
+                        <td class="change-positive"><i class="fa-solid fa-arrow-trend-up"></i> +2.14%</td>
+                        <td>2,720,000 / 2,800,000</td>
+                        <td><button class="btn btn-outline" style="padding: 8px 16px; font-size: 12px;"><i class="fa-solid fa-arrow-right-arrow-left"></i> Обмiн</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="currency-cell">
+                                <div class="currency-icon-wrapper"><i class="fa-solid fa-t"></i></div>
+                                <div>
+                                    USDT <br><span class="currency-code">Tether</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>41.20</td>
+                        <td class="change-negative"><i class="fa-solid fa-arrow-trend-down"></i> -0.05%</td>
+                        <td>41.00 / 41.40</td>
+                        <td><button class="btn btn-outline" style="padding: 8px 16px; font-size: 12px;"><i class="fa-solid fa-arrow-right-arrow-left"></i> Обмiн</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+        <div class="section-header">
+            <h2>Чому обирають <span>нас</span></h2>
+            <p>Ми забезпечуємо найкращий досвiд обмiну валют завдяки передовим технологiям</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3>Миттєвий обмiн</h3>
+                <p>Транзакцiї обробляються за лiченi секунди. Без затримок та зайвих очiкувань.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h3>Безпека</h3>
+                <p>Багаторiвневий захист та шифрування даних. Вашi кошти завжди пiд надiйним захистом.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-percent"></i>
+                </div>
+                <h3>Низькi комiсiї</h3>
+                <p>Мiнiмальнi комiсiї серед усiх обмiнникiв. Прозорi умови без прихованих платежiв.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <h3>24/7 Пiдтримка</h3>
+                <p>Наша команда пiдтримки працює цiлодобово та готова допомогти вам у будь-який момент.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <h3>Аналiтика</h3>
+                <p>Детальна статистика та графiки курсiв для прийняття найкращих рiшень при обмiнi.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <h3>Верифiкацiя</h3>
+                <p>Швидка верифiкацiя акаунту для доступу до розширених лiмiтiв та функцiй.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how-it-works">
+        <div class="section-header">
+            <h2>Як це <span>працює</span></h2>
+            <p>Чотири простих кроки для здiйснення обмiну валют</p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">
+                    <i class="fa-solid fa-user-plus" style="font-size: 20px;"></i>
+                </div>
+                <h3>Реєстрацiя</h3>
+                <p>Створiть акаунт за кiлька хвилин, вказавши базову iнформацiю</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">
+                    <i class="fa-solid fa-arrow-right-arrow-left" style="font-size: 20px;"></i>
+                </div>
+                <h3>Обмiн</h3>
+                <p>Оберiть валюту, введiть суму та вкажiть банк для отримання</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">
+                    <i class="fa-solid fa-credit-card" style="font-size: 20px;"></i>
+                </div>
+                <h3>Оплата</h3>
+                <p>Переведiть кошти за реквiзитами, якi будуть надiсланi вам</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">
+                    <i class="fa-solid fa-circle-check" style="font-size: 20px;"></i>
+                </div>
+                <h3>Готово</h3>
+                <p>Отримайте обмiнянi кошти на вашу картку протягом хвилин</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contacts">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>
+                    <i class="fa-solid fa-coins"></i>
+                    CryptoExchange
+                </h3>
+                <p>Надiйний сервiс обмiну валют з 2022 року. Ми забезпечуємо швидкi, безпечнi та вигiднi обмiни для тисяч користувачiв щодня.</p>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#" class="social-link"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Iнформацiя</h4>
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-file-lines"></i> Про нас</a></li>
+                    <li><a href="#"><i class="fa-solid fa-scale-balanced"></i> Правила</a></li>
+                    <li><a href="#"><i class="fa-solid fa-lock"></i> Полiтика конфiденцiйностi</a></li>
+                    <li><a href="#"><i class="fa-solid fa-file-contract"></i> Угода користувача</a></li>
+                    <li><a href="#"><i class="fa-solid fa-newspaper"></i> Блог</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Контакти</h4>
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-envelope"></i> support@cryptoexchange.ua</a></li>
+                    <li><a href="#"><i class="fa-brands fa-telegram"></i> @CryptoExchangeBot</a></li>
+                    <li><a href="#"><i class="fa-solid fa-phone"></i> +380 (XX) XXX-XX-XX</a></li>
+                    <li><a href="#"><i class="fa-solid fa-clock"></i> 24/7 Онлайн</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Партнерство</h4>
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-handshake"></i> Партнерська програма</a></li>
+                    <li><a href="#"><i class="fa-solid fa-code"></i> API для бiзнесу</a></li>
+                    <li><a href="#"><i class="fa-solid fa-bullhorn"></i> Реклама</a></li>
+                    <li><a href="#"><i class="fa-solid fa-building"></i> Для компанiй</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>2022 — 2026 CryptoExchange. Усi права захищенi.</span>
+            <div class="footer-bottom-links">
+                <a href="#">Правила</a>
+                <a href="#">Конфiденцiйнiсть</a>
+                <a href="#">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // Swap currencies
+        function swapCurrencies() {
+            const from = document.getElementById('currencyFrom');
+            const to = document.getElementById('currencyTo');
+            const temp = from.value;
+            from.value = to.value;
+            to.value = temp;
+        }
+
+        // Form submit
+        document.getElementById('exchangeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Заявку на обмiн прийнято! Очiкуйте пiдтвердження.');
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(11, 14, 17, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(11, 14, 17, 0.92)';
+            }
+        });
+    </script>
+</body>
+</html>
