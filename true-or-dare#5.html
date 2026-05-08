@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правда чи Дія — Dark Edition</title>
+    
+    <!-- Елегантний шрифт Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Тонкі мінімалістичні іконки Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Дуже глибокий темний фон з ледь помітним градієнтом */
+            background: radial-gradient(circle at center, #1a1a24 0%, #050505 100%);
+            background-color: #050505;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+
+        .menu-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        /* Блок заголовка */
+        .header-section {
+            text-align: center;
+        }
+
+        .age-badge {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: #b91c1c; /* Темно-червоний */
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .game-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: #ececec;
+            text-transform: uppercase;
+            line-height: 1.2;
+            margin-left: 8px; /* Компенсація letter-spacing для центрування */
+        }
+
+        .game-title span {
+            font-weight: 700;
+        }
+
+        /* Тонка лінія-розділювач */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            margin: 0 auto;
+            width: 80%;
+        }
+
+        /* Контейнер кнопок */
+        .buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Строгий стиль кнопок */
+        .btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px; /* Мінімальне заокруглення для серйозності */
+            padding: 18px 24px;
+            color: #a3a3a3;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.4s ease;
+        }
+
+        .btn i {
+            font-size: 1.4rem;
+            font-weight: 300;
+        }
+
+        /* Ефект наведення на звичайні кнопки */
+        .btn:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateX(5px); /* Легкий зсув вправо при наведенні */
+        }
+
+        /* Акцентна кнопка (Створити кімнату) - Винний / Темно-червоний */
+        .btn-primary {
+            border-color: #b91c1c;
+            color: #ffffff;
+            background: rgba(185, 28, 28, 0.05);
+        }
+
+        .btn-primary i {
+            color: #ef4444;
+        }
+
+        .btn-primary:hover {
+            background: rgba(185, 28, 28, 0.15);
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(185, 28, 28, 0.2);
+        }
+
+        /* Додаткове міні-меню знизу */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .footer-link {
+            color: #525252;
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: #a3a3a3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        
+        <div class="header-section">
+            <span class="age-badge">Premium Edition</span>
+            <h1 class="game-title">Правда<br><span>чи Дія</span></h1>
+        </div>
+
+        <div class="divider"></div>
+        
+        <div class="buttons-wrapper">
+            <!-- Головна дія -->
+            <button class="btn btn-primary">
+                <i class="ph-light ph-plus"></i>
+                Створити кімнату
+            </button>
+
+            <!-- Приєднатися -->
+            <button class="btn">
+                <i class="ph-light ph-arrow-right"></i>
+                Приєднатися
+            </button>
+
+            <!-- Правила -->
+            <button class="btn">
+                <i class="ph-light ph-book-open-text"></i>
+                Правила гри
+            </button>
+        </div>
+
+        <div class="footer-links">
+            <a href="#" class="footer-link">Профіль</a>
+            <a href="#" class="footer-link">Налаштування</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

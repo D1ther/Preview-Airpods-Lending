@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правда чи Дія — Дитяче Party!</title>
+    
+    <!-- Google Fonts: Bubblegum Sans для справжнього "бульбашкового" стилю -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons Round (більш округлі та дитячі іконки) -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Палітра "Льодяники" */
+            --bg-top: #a7d8f5;     /* Світло-голубий */
+            --bg-bottom: #fcf6bd;  /* Світло-жовтий */
+            --text-color: #333333; /* Темно-сірий для читабельності */
+            --accent-create: #4ade80; /* Яскраво-зелений */
+            --accent-join: #fb923c;   /* Помаранчевий */
+            --accent-info: #60a5fa;   /* Синє небо */
+            --accent-profile: #f472b6; /* Рожевий */
+            --btn-text: #ffffff;    /* Білий текст для кнопок */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Bubblegum Sans', cursive;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+            overflow: hidden;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        /* Декоративні бульбашки на фоні */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+
+        .bubble:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-duration: 25s; }
+        .bubble:nth-child(2) { width: 50px; height: 50px; left: 25%; animation-duration: 20s; }
+        .bubble:nth-child(3) { width: 120px; height: 120px; left: 40%; animation-duration: 30s; }
+        .bubble:nth-child(4) { width: 60px; height: 60px; left: 70%; animation-duration: 22s; }
+        .bubble:nth-child(5) { width: 100px; height: 100px; left: 85%; animation-duration: 28s; }
+
+        .main-menu {
+            width: 90%;
+            max-width: 420px;
+            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            border: 10px solid #ffffff;
+            border-radius: 50px;
+            box-shadow: 0 20px 0px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo-section {
+            margin-bottom: 50px;
+        }
+
+        .logo-text {
+            font-size: 3rem;
+            font-weight: normal;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* Різнокольорові букви для веселощів */
+        .logo-text span:nth-child(1) { color: #f472b6; }
+        .logo-text span:nth-child(2) { color: #fb923c; }
+        .logo-text span:nth-child(3) { color: #60a5fa; }
+        .logo-text span:nth-child(4) { color: #4ade80; }
+        .logo-text span:nth-child(5) { color: #a18cd1; }
+        .logo-text span:nth-child(6) { color: #f472b6; }
+        .logo-text span:nth-child(7) { color: #fb923c; }
+
+        .logo-text span {
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .logo-text:hover span {
+            animation: dance 0.5s ease infinite alternate;
+        }
+
+        @keyframes dance {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        .menu-grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        /* Загальний стиль кнопок-"хмаринок" */
+        .btn {
+            position: relative;
+            padding: 20px 25px;
+            border: none;
+            border-radius: 25px;
+            color: var(--btn-text);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 0px rgba(0, 0, 0, 0.15);
+            text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(3px);
+            box-shadow: 0 7px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(10px);
+            box-shadow: 0 0 0px rgba(0, 0, 0, 0);
+        }
+
+        .btn i {
+            font-size: 1.8rem;
+        }
+
+        /* Кольори для кожної кнопки */
+        .btn-create { background-color: var(--accent-create); }
+        .btn-create:hover { background-color: #34d399; }
+
+        .btn-join { background-color: var(--accent-join); }
+        .btn-join:hover { background-color: #f97316; }
+
+        .btn-info { background-color: var(--accent-info); }
+        .btn-info:hover { background-color: #3b82f6; }
+
+        .btn-profile { background-color: var(--accent-profile); }
+        .btn-profile:hover { background-color: #ec4899; }
+
+        /* Заголовок онлайн-статусу */
+        .online-counter {
+            font-size: 0.9rem;
+            color: rgba(51, 51, 51, 0.6);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            padding: 5px 15px;
+            background: #ffffff;
+            border-radius: 100px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фонові бульбашки -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <div class="main-menu">
+        <div class="online-counter">
+            <span class="online-dot"></span> Гравців онлайн: 1,240
+        </div>
+
+        <div class="logo-section">
+            <h1 class="logo-text">
+                <span>П</span><span>р</span><span>а</span><span>в</span><span>д</span><span>а</span>
+            </h1>
+            <h1 class="logo-text">
+                <span>ч</span><span>и</span><span></span>
+                <span>Д</span><span>і</span><span>я</span>
+            </h1>
+        </div>
+
+        <div class="menu-grid">
+            <!-- Створити кімнату -->
+            <button class="btn btn-create">
+                <i class="material-icons-round">add_circle</i>
+                Створити кімнату!
+            </button>
+
+            <!-- Приєднатися -->
+            <button class="btn btn-join">
+                <i class="material-icons-round">group</i>
+                До друзів!
+            </button>
+
+            <!-- Як грати -->
+            <button class="btn btn-info">
+                <i class="material-icons-round">help</i>
+                Як грати?
+            </button>
+
+            <!-- Налаштування/Профіль -->
+            <button class="btn btn-profile">
+                <i class="material-icons-round">face</i>
+                Мій профіль
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>

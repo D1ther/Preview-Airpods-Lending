@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правда чи Дія — Matcha & Lime</title>
+    
+    <!-- Шрифт Outfit: сучасний, акуратний, з м'якими округленнями -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Привітні, але стильні іконки Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            /* Глибокий смарагдовий колір фону */
+            background-color: #064E3B; 
+            color: #ECFDF5;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Абстрактні м'які плями на фоні для "вайбу" */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            background-color: #047857; /* Трохи світліший зелений */
+            top: -50px;
+            left: -50px;
+        }
+
+        .blob-2 {
+            width: 250px;
+            height: 250px;
+            background-color: #10B981; /* Яскраво-м'ятний */
+            bottom: -50px;
+            right: -50px;
+        }
+
+        .menu-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .header-section {
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #6EE7B7; /* М'ятний текст */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .game-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        /* Контейнер кнопок */
+        .buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* Загальний стиль для кнопок (капсульна форма) */
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 18px 24px;
+            border-radius: 100px; /* Повністю округлі краї */
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn i {
+            font-size: 1.5rem;
+        }
+
+        /* Ефект натискання */
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Головна кнопка "Створити кімнату" — Яскравий Лайм */
+        .btn-primary {
+            background-color: #BEF264; /* Лаймовий */
+            color: #14532D; /* Дуже темний зелений для тексту */
+            box-shadow: 0 8px 20px rgba(190, 242, 100, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: #D9F99D;
+            box-shadow: 0 12px 25px rgba(190, 242, 100, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Другорядні кнопки — напівпрозорі */
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ECFDF5;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Маленька іконка налаштувань під меню */
+        .settings-btn {
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: transparent;
+            color: #6EE7B7;
+            border: 1px solid rgba(110, 231, 183, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .settings-btn i {
+            font-size: 1.4rem;
+        }
+
+        .settings-btn:hover {
+            background-color: rgba(110, 231, 183, 0.1);
+            transform: rotate(45deg);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Вайбові плями на фоні -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="menu-container">
+        
+        <div class="header-section">
+            <span class="subtitle">Час для гри</span>
+            <h1 class="game-title">Правда<br>чи Дія</h1>
+        </div>
+        
+        <div class="buttons-wrapper">
+            <!-- Акцентна кнопка -->
+            <button class="btn btn-primary">
+                <i class="ph-fill ph-play-circle"></i>
+                Створити кімнату
+            </button>
+
+            <!-- Інші кнопки -->
+            <button class="btn btn-secondary">
+                <i class="ph-fill ph-users"></i>
+                Приєднатися
+            </button>
+
+            <button class="btn btn-secondary">
+                <i class="ph-fill ph-book-open"></i>
+                Як грати?
+            </button>
+        </div>
+
+        <!-- Кругла кнопка налаштувань (додає цікавого балансу макету) -->
+        <button class="settings-btn" title="Налаштування">
+            <i class="ph-fill ph-gear"></i>
+        </button>
+
+    </div>
+
+</body>
+</html>

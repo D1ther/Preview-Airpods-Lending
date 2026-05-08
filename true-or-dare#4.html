@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Правда чи Дія — Небесний стиль</title>
+    
+    <!-- Підключення шрифтів: Rubik Bubbles для заголовка та Nunito для кнопок -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&family=Rubik+Bubbles&display=swap" rel="stylesheet">
+    
+    <!-- Підключення округлих іконок Material Icons Round -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Просто чистий небесно-голубий фон */
+            background-color: #60A5FA; 
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden;
+        }
+
+        .menu-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Стиль для бульбашкового заголовка */
+        .game-title {
+            font-family: 'Rubik Bubbles', cursive;
+            font-size: 3.5rem;
+            color: #FFFFFF;
+            line-height: 1.1;
+            letter-spacing: 2px;
+            /* Створюємо об'ємний контур, як у наклейок */
+            text-shadow: 
+                -3px -3px 0 #1E3A8A,  
+                 3px -3px 0 #1E3A8A,
+                -3px  3px 0 #1E3A8A,
+                 3px  3px 0 #1E3A8A,
+                 0px  8px 0 #1E3A8A;
+            margin-bottom: 20px;
+            transform: rotate(-3deg);
+        }
+
+        .buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Базовий стиль для кнопок (іграшковий 3D ефект) */
+        .btn {
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900;
+            font-size: 1.4rem;
+            color: #1E3A8A; /* Темно-синій текст для контрасту */
+            background-color: #FFFFFF;
+            border: 4px solid #1E3A8A;
+            border-radius: 25px;
+            padding: 18px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 8px 0 #1E3A8A; /* Тверда тінь для об'єму */
+            transition: all 0.1s ease-in-out;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn i {
+            font-size: 2rem;
+        }
+
+        /* Ефект натискання (кнопка вдавлюється) */
+        .btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #1E3A8A;
+        }
+
+        /* Головна кнопка (Створити кімнату) - Яскраво-рожева */
+        .btn-primary {
+            background-color: #FF6B9E;
+            color: #FFFFFF;
+        }
+        
+        /* Друга кнопка - Жовта */
+        .btn-secondary {
+            background-color: #FDE047;
+        }
+
+        /* Третя кнопка - Біла (вже задано в .btn) */
+        .btn-white {
+            background-color: #FFFFFF;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        
+        <!-- Заголовок гри -->
+        <h1 class="game-title">ПРАВДА<br>ЧИ ДІЯ</h1>
+        
+        <div class="buttons-wrapper">
+            <!-- Акцентна кнопка СТВОРИТИ КІМНАТУ -->
+            <button class="btn btn-primary">
+                <i class="material-icons-round">add_reaction</i>
+                Створити кімнату
+            </button>
+
+            <!-- Приєднатися -->
+            <button class="btn btn-secondary">
+                <i class="material-icons-round">group_add</i>
+                Приєднатися
+            </button>
+
+            <!-- Правила гри -->
+            <button class="btn btn-white">
+                <i class="material-icons-round">menu_book</i>
+                Як грати?
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>

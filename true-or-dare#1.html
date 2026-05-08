@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=DM+Mono:wght@400;500&display=swap');
+  @import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Unbounded', sans-serif;
+    background: #1c1710;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 460px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .top-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeIn 0.5s 0.05s ease forwards;
+  }
+
+  .top-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #6b5f44;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .top-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #e8a045;
+    box-shadow: 0 0 0 3px rgba(232,160,69,0.2);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(232,160,69,0.2); }
+    50% { box-shadow: 0 0 0 6px rgba(232,160,69,0.08); }
+  }
+
+  .hero {
+    width: 100%;
+    margin-bottom: 2.75rem;
+    opacity: 0;
+    animation: slideUp 0.55s 0.15s ease forwards;
+  }
+
+  .hero-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #6b5f44;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(44px, 11vw, 62px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: #f0e6d0;
+    display: block;
+  }
+
+  .hero-title .accent {
+    color: #e8a045;
+  }
+
+  .hero-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #5a4f38;
+    margin-top: 1.25rem;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+
+  .btn-create {
+    width: 100%;
+    padding: 1.15rem 1.4rem;
+    border-radius: 16px;
+    border: none;
+    background: #e8a045;
+    color: #1c1710;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.15s, background 0.15s;
+    opacity: 0;
+    animation: slideUp 0.5s 0.25s ease forwards;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .btn-create:hover { background: #f0aa50; transform: translateY(-2px); }
+  .btn-create:active { transform: scale(0.98); }
+
+  .btn-create i { font-size: 20px; }
+
+  .sec-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    opacity: 0;
+    animation: slideUp 0.5s 0.35s ease forwards;
+    margin-bottom: 3rem;
+  }
+
+  .btn-sec {
+    flex: 1;
+    padding: 0.9rem 0.75rem;
+    border-radius: 12px;
+    border: 1px solid #2e2618;
+    background: #221e14;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #7a6e54;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-sec i { font-size: 15px; color: #5a4f38; }
+  .btn-sec:hover { background: #2a2518; border-color: #3d3424; color: #a09070; }
+  .btn-sec:active { transform: scale(0.98); }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #4a4030;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeIn 0.5s 0.45s ease forwards;
+  }
+
+  .modes {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    animation: slideUp 0.5s 0.5s ease forwards;
+  }
+
+  .mode-item {
+    background: #221e14;
+    border: 1px solid #2e2618;
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .mode-item:hover {
+    background: #272216;
+    border-color: #3d3424;
+    transform: translateX(4px);
+  }
+
+  .mode-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .mi-amber { background: rgba(232,160,69,0.12); color: #e8a045; }
+  .mi-stone { background: rgba(160,144,112,0.1); color: #a09070; }
+  .mi-red   { background: rgba(200,80,60,0.12); color: #c8503c; }
+
+  .mode-text { flex: 1; }
+
+  .mode-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #c8b898;
+    display: block;
+    letter-spacing: -0.02em;
+    margin-bottom: 2px;
+  }
+
+  .mode-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #4a4030;
+    display: block;
+    letter-spacing: 0.04em;
+  }
+
+  .mode-arrow {
+    font-size: 16px;
+    color: #3d3424;
+    transition: color 0.15s;
+  }
+
+  .mode-item:hover .mode-arrow { color: #6b5f44; }
+
+  .bottom-bar {
+    width: 100%;
+    margin-top: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    animation: fadeIn 0.5s 0.65s ease forwards;
+  }
+
+  .online-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .avatars {
+    display: flex;
+  }
+
+  .av {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid #1c1710;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -6px;
+  }
+
+  .av1 { background: #4a3820; color: #c8a060; }
+  .av2 { background: #1e3040; color: #6090b8; }
+  .av3 { background: #2e2420; color: #a07060; }
+
+  .online-txt {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #4a4030;
+    margin-left: 10px;
+  }
+
+  .ver-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #3d3424;
+    letter-spacing: 0.1em;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top-bar">
+    <span class="top-tag">Party Game</span>
+    <div class="top-dot"></div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-label">Головне меню</div>
+    <span class="hero-title">Правда<br>або <span class="accent">Дія</span></span>
+    <p class="hero-sub">Грай з друзями · Обирай свій режим</p>
+  </div>
+
+  <button class="btn-create">
+    Створити кімнату
+    <i class="ti ti-arrow-right" aria-hidden="true"></i>
+  </button>
+
+  <div class="sec-row">
+    <button class="btn-sec">
+      <i class="ti ti-door-enter" aria-hidden="true"></i>
+      За кодом
+    </button>
+    <button class="btn-sec">
+      <i class="ti ti-dice" aria-hidden="true"></i>
+      Випадкова
+    </button>
+    <button class="btn-sec">
+      <i class="ti ti-crown" aria-hidden="true"></i>
+      Топ кімнати
+    </button>
+  </div>
+
+  <div class="section-label">Режими</div>
+  <div class="modes">
+    <div class="mode-item">
+      <div class="mode-icon mi-amber"><i class="ti ti-star" aria-hidden="true"></i></div>
+      <div class="mode-text">
+        <span class="mode-name">Класика</span>
+        <span class="mode-desc">Стандартні запитання для всіх</span>
+      </div>
+      <i class="ti ti-chevron-right mode-arrow" aria-hidden="true"></i>
+    </div>
+    <div class="mode-item">
+      <div class="mode-icon mi-stone"><i class="ti ti-users" aria-hidden="true"></i></div>
+      <div class="mode-text">
+        <span class="mode-name">Лайт</span>
+        <span class="mode-desc">Для нових знайомств і компаній</span>
+      </div>
+      <i class="ti ti-chevron-right mode-arrow" aria-hidden="true"></i>
+    </div>
+    <div class="mode-item">
+      <div class="mode-icon mi-red"><i class="ti ti-flame" aria-hidden="true"></i></div>
+      <div class="mode-text">
+        <span class="mode-name">Без фільтрів</span>
+        <span class="mode-desc">Тільки для дорослих · 18+</span>
+      </div>
+      <i class="ti ti-chevron-right mode-arrow" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="online-row">
+      <div class="avatars">
+        <div class="av av1">С</div>
+        <div class="av av2">М</div>
+        <div class="av av3">А</div>
+      </div>
+      <span class="online-txt">2 400 онлайн</span>
+    </div>
+    <span class="ver-tag">v2.0</span>
+  </div>
+
+</div>
+</body>
+</html>
